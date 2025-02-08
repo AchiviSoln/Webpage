@@ -457,6 +457,9 @@ th, td {
             </div>
         </div>
     </div>
+
+
+
     <!-- Check Before You Start Investing -->
     <h2>Check Before You Start Investing</h2>
   <p style="color: blue; font-weight: bold;">Secure your finances first: Emergency Fund, Term Plan, Health Insurance - Key essentials</p>
@@ -483,6 +486,7 @@ th, td {
             </tr>
         </tbody>
     </table>
+
     <div class="animated-text">
         🚨 Get adequate health insurance; explore super top-ups for extra protection.
     </div>
@@ -672,22 +676,15 @@ th, td {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("generateButton").addEventListener("click", generateAssetClasses);
-            document.getElementById("calculateButton").addEventListener("click", function () {
-            calculateRetirement();  // Step 1: Perform all calculations first
-
-            // Step 2: Ensure Progress Bar & Countdown Update AFTER Calculations
-            setTimeout(() => {
-                updateProgressBar();  
-                calculateRetirementCountdown();
-            }, 100);  
-            });
+            document.getElementById("calculateButton").addEventListener("click",calculateRetirement); 
 
             // Automatically update on page load
             generateAssetClasses(); // Automatically generate asset classes on page load
 
             calculateRetirement();
-            updateProgressBar();
             calculateRetirementCountdown();
+
+            
             
         });
       function calculateSensitivityAnalysis() {
@@ -738,11 +735,13 @@ th, td {
 }
 
 function updateProgressBar() {
-    const totalBalanceAtRetirement = parseFloat(document.getElementById("corpusAtRetirement").innerText.replace(/[^0-9.-]+/g, ""));
-    const retirementGoal = parseFloat(document.getElementById("retirementGoal").value);
-    
-    let progress = (totalBalanceAtRetirement / retirementGoal) * 100;
-    progress = Math.min(progress, 100); // Ensures it doesn't exceed 100%
+
+    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
+    const corpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
+    const retirementGoal = parseFloat(document.getElementById("retirementGoal").value) || 1; // Avoid division by zero
+
+    let progress = (corpusAtRetirement / retirementGoal) * 100;
+    progress = Math.max(0, Math.min(progress, 100)); // Ensure progress is between 0% - 100%
 
     const progressBar = document.getElementById("progressBar");
     progressBar.style.width = `${progress}%`;
@@ -757,8 +756,9 @@ function updateProgressBar() {
         progressBar.style.background = "linear-gradient(to right, #28a745, #218838)"; // Green for high progress
     }
 
-    document.getElementById("progressText").innerText = `${progress.toFixed(2)}% of goal achieved by retirement age`;
+    document.getElementById("progressText").innerText = `${progress.toFixed(2)}% of goal will be achieved`;
 }
+
 
 
 function calculateRetirementCountdown() {
@@ -936,17 +936,13 @@ function calculateCorpus(initialBalance, deposit, annualReturn, depositFrequency
             let totalInitialBalance = 0;
             let totalInvestedAmount = 0;
             let totalInterestEarned = 0;
+            
 
-            // Calculate total initial balance once
-            for (let i = 1; i <= assetClassCount; i++) {
-                const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
-                totalInitialBalance += initialBalance;
-            }
-calculateRetirementCountdown();
-          updateProgressBar();
-          calculateSensitivityAnalysis();
-    calculateMarketReturnScenarios();
-    calculateMarketReturnScenarios1()
+        updateProgressBar();
+        calculateRetirementCountdown();
+        calculateSensitivityAnalysis();
+        calculateMarketReturnScenarios();
+        calculateMarketReturnScenarios1();
 
             // Calculate total balance at retirement for retirement allocation percentages
             let totalBalanceAtRetirement = 0;
@@ -1117,7 +1113,7 @@ calculateRetirementCountdown();
 
             // Calculate and populate the Targeted Corpus table
             calculateTargetedCorpus();
-          
+
 
             renderChart(labels, datasets);
         }
