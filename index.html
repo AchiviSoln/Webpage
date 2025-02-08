@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Investment Growth Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+
+        h1 {
+        color: #0073e6;
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 10px;
+        border-bottom: 4px solid #0073e6;
+        }
+
+        h2 {
+        font-size: 20px;
+        color: #0056b3;
+        text-transform: uppercase;
+        font-weight: bold;
+        border-bottom: 2px solid #0056b3;
+        padding-bottom: 5px;
+        margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="number"], input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #0073e6;
+            box-shadow: 0px 0px 8px rgba(0, 115, 230, 0.3);
+            outline: none;
+        }
+        /* Parent Container with White Background */
+        .retirement-info-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* Flexbox Layout for Side-by-Side Display */
+        .retirement-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Ensures headers align */
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Individual Sections */
+        .retirement-section {
+            flex: 1;
+            min-width: 300px; /* Ensures responsiveness */
+            padding: 10px;
+        }
+
+        /* Consistent Header Alignment */
+        .retirement-section h2 {
+            margin-top: 0;
+            text-align: left;
+            font-size: 20px;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+        }
+
+        @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+        }
+        .animated-text {
+            background: #ffcccc;
+            border-left: 6px solid #ff0000;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #990000;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Chart Container for Responsive Sizing */
+        .chart-container {
+            width: 100%;
+            max-width: 700px; /* Slightly bigger */
+            height: 400px; /* Increased height */
+            margin: auto;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+
+        /* Progress Bar Styling */
+        /* Progress Bar Container */
+        .progress-container {
+            width: 100%;
+            max-width: 600px; /* Adjust width as needed */
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;/* Progress Bar Container */
+        .progress-container {
+            width: 100%;
+            max-width: 600px; /* Adjust width as needed */
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #0073e6;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Progress Bar Fill */
+        #progressBar {
+            height: 25px;
+            width: 0%;
+            background: linear-gradient(to right, #28a745, #218838);
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px 0 0 10px;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        /* Progress Text */
+        #progressText {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            color: #333;
+        }
+
+            border: 2px solid #0073e6;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Progress Bar Fill */
+        #progressBar {
+            height: 25px;
+            width: 0%;
+            background: linear-gradient(to right, #28a745, #218838);
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px 0 0 10px;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        /* Progress Text */
+        #progressText {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            color: #333;
+        }
+
+
+       /* Button Styling */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            background: linear-gradient(to right, #28a745, #218838);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+            text-align: center;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Hover Effect */
+        button:hover {
+            background: linear-gradient(to right, #218838, #1e7e34);
+            transform: scale(1.05);
+        }
+
+        canvas {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 15px;
+            background: white;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, #0073e6, #0056b3);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #ffeb99;
+            cursor: pointer;
+        }
+
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Compact Table Styling */
+        #assetClassTable th,
+        #assetClassTable td {
+            padding: 6px;
+            font-size: 13px;
+        }
+
+        #assetClassTable input {
+            width: 90%;
+            padding: 4px;
+            font-size: 13px;
+        }
+      
+   table {
+    width: auto; /* Adjusts to content */
+    border-collapse: collapse; /* Removes extra spacing between cells */
+    margin: 20px auto; /* Centers the table */
+    font-size: 16px; /* Compact font size */
+    table-layout: auto; /* Adjust column widths dynamically */
+    border: 1px solid #ccc; /* Soft border for entire table */
+}
+th, td {
+    max-width: 150px; /* Prevents columns from getting too wide */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds '...' for overflowed text */
+}
+ /* Table headers */
+        th {
+            background-color: #0073e6;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Table rows */
+        td, th {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        /* Alternating row colors */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect */
+        tr:hover {
+            background-color: #ffeb99;
+        }
+
+        /* Adding a border and shadow to the table */
+        .table-container {
+            border: 2px solid #0073e6;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            margin: auto;
+        }
+      
+        /* Mobile-Friendly Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 6px;
+            }
+        }
+      
+    </style>
+</head>
+<body>
+    <h1>Retirement Readiness Calculator</h1>
+
+    <h2>User Input Section</h2>
+    <p style="color: #0073e6; font-weight: bold; display: flex; align-items: center;">
+        <span style="margin-right: 5px;"></span>  Check and update the pre-filled data as per your current data.
+    </p>
+
+    <!-- Input Fields in Table Format -->
+    <table>
+            <tr>
+                <th>Your Current Age:</th>
+                <td><input type="number" id="currentAge" value="40" min="0" placeholder="e.g., 40"></td>
+                <th>Planned Retirement Age:</th>
+                <td><input type="number" id="retirementAge" value="60" min="0" placeholder="e.g., 60"></td>
+                <th>Life Expectancy:</th>
+                <td><input type="number" id="lifeExpectancy" value="80" min="0" placeholder="e.g., 80"></td>
+            </tr>
+            <tr>
+                <th>Retirement Goal Amount:</th>
+                <td><input type="number" id="retirementGoal" value="30000000" min="0" placeholder="e.g., 3,00,00,000"></td>
+                <th>Expected Annual Inflation Rate (%):</th>
+                <td><input type="number" id="expectedInflation" value="6" min="0" placeholder="e.g., 6"></td>
+                <th>Expected Average Portfolio Return % PA:</th>
+                <td><input type="number" id="expectedReturn" value="7" min="0" placeholder="e.g., 7"></td>
+            </tr>
+            <tr>
+                <th>Current Monthly Expenditure:</th>
+                <td><input type="number" id="currentExpenditure" value="60000" min="0" placeholder="e.g., 60,000"></td>
+                <th>Current Emergency Fund:</th>
+                <td><input type="number" id="emergencyFund" value="300000" min="0" placeholder="e.g., 3,00,000"></td>
+                <th>Current Term Plan Assurance:</th>
+                <td><input type="number" id="termPlanAssurance" value="10000000" min="0" placeholder="e.g., 1,00,00,000"></td>
+            </tr>
+            <tr>
+                <th>Number of Asset Classes:</th>
+                <td colspan="5"><input type="number" id="assetClassCount" value="3" min="1" max="5" placeholder="e.g., 3"></td>
+            </tr>
+    </table>
+
+ 
+ 
+
+    <!-- Asset Class Input Table -->
+  
+
+    <h2>Asset Classes</h2>
+    <!-- Buttons -->
+    <p style="color: blue; font-weight: bold;">For more than 3 asset classes, enter the number and click 'Add Asset Classes.' Edit asset details below</p>
+
+    <div class="button-container">
+        <button id="generateButton">Add Asset Classes</button>
+    </div>
+    <table id="assetClassTable">
+        <thead>
+            <tr>
+                <th>Asset Class Name</th>
+                <th>Initial Balance</th>
+                <th>Regular Deposit</th>
+                <th>Expected Annual Return (%)</th>
+                <th>Deposit Frequency (per year)</th>
+                <th>Deposit Term (Years)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically generated here -->
+        </tbody>
+    </table>
+
+   <p style="color: blue; font-weight: bold;">After updating the required input values, click the calculate button.</p> 
+   <div class="button-container">
+    <button id="calculateButton">Calculate</button>
+</div>
+
+    <div class="retirement-info-container">
+        <div class="retirement-info">
+            <!-- Retirement Countdown Section -->
+            <div class="retirement-section">
+                <h2>Retirement Countdown</h2>
+                <p style="color: blue; font-weight: bold;">
+                    Time left until retirement: 
+                    <span id="retirementCountdown" style="font-size: 18px; font-weight: bold; color: #e74c3c;"></span>
+                </p>
+            </div>
+
+            <!-- Retirement Savings Progress Section -->
+            <div class="retirement-section">
+                <h2>Retirement Savings Progress</h2>
+                <p style="color: blue; font-weight: bold;">Indicates if your retirement goal amount will be achieved by your retirement age.</p>
+                <div class="progress-container">
+                    <div id="progressBar">0%</div>
+                </div>
+                <p id="progressText">0% of the Retirement goal will be achieved by retirement age</p>
+            </div>
+        </div>
+    </div>
+    <!-- Check Before You Start Investing -->
+    <h2>Check Before You Start Investing</h2>
+  <p style="color: blue; font-weight: bold;">Secure your finances first: Emergency Fund, Term Plan, Health Insurance - Key essentials</p>
+
+
+    <table id="checkBeforeInvestingTable">
+        <thead>
+            <tr>
+                <th>Check</th>
+                <th>Amount</th>
+                <th>General Thumb Rule</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Current Emergency Fund</td>
+                <td id="emergencyFundDisplay">0</td>
+                <td>Minimum 6 to 10 Months of Expense</td>
+            </tr>
+            <tr>
+                <td>Current Term Plan Coverage</td>
+                <td id="termPlanCoverageDisplay">0</td>
+                <td>Minimum 8 to 12 times of your Annual Income</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="animated-text">
+        🚨 Get adequate health insurance; explore super top-ups for extra protection.
+    </div>
+
+  <h2>Retirement Corpus Growth Over the Years</h2>
+
+    <!-- Chart -->
+    <div class="chart-container">
+        <canvas id="investmentChart"></canvas>
+    </div>
+
+    <!-- Retirement Summary -->
+    <h2>Retirement Summary</h2>
+    <table id="summaryTable">
+        <thead>
+            <tr>
+                <th>Asset Class</th>
+                <th>Retirement Age</th>
+                <th>Initial Balance</th>
+                <th>Invested Amount</th>
+                <th>Interest Earned</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+   
+
+    <!-- Asset Allocation Status -->
+    <h2>Asset Allocation Status</h2>
+  <p style="color: blue; font-weight: bold;">Thumb Rule: 100 - Age = Equity Exposure. Reduce equity exposure as you near retirement.</p>
+
+    <table id="allocationStatusTable">
+        <thead>
+            <tr>
+                <th>Asset Class</th>
+                <th>Current Age (<span id="currentAgeDisplay">40</span>)</th>
+                <th>Retirement Age (<span id="retirementAgeDisplay">60</span>)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Portfolio Growth Over Time -->
+    <h2>Portfolio Growth Over Time</h2>
+  <p style="color: blue; font-weight: bold;">View your retirement corpus at different stages and evaluate early retirement options.</p>
+
+    <table id="portfolioGrowthTable">
+        <thead>
+            <tr>
+                <th>Age</th>
+                <th>Equity</th>
+                <th>Fixed Income</th>
+                <th>Gold</th>
+                <th>Total Portfolio</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+ <!-- Retirement Expense Analysis -->
+    <h2>Retirement Expense Analysis</h2>
+  <p style="color: blue; font-weight: bold;">Compare first-month retirement expenses with corpus returns—watch out for rising costs and potential return decline</p>
+
+    <table id="expenseTable">
+        <thead>
+            <tr>
+                <th>Age of Retirement</th>
+                <th>Expected Expense per Month</th>
+                <th>Interest Amount from Portfolio</th>
+                <th>Portfolio is Sufficient</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <!-- Retirement Readiness -->
+    <h2>Retirement Readiness</h2>
+  <p style="color: blue; font-weight: bold;">Minimum 35 times annual expense for a comfortable retirement; 4% withdrawal rule ensures longevity of your corpus.</p>
+
+    <table id="retirementReadinessTable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Amount</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Retirement Age</td>
+                <td id="retirementAgeReadiness">60</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Corpus Available at Retirement</td>
+                <td id="corpusAtRetirement">0</td>
+                <td id="corpusComment"></td>
+            </tr>
+            <tr>
+                <td>Expected Annual Expense</td>
+                <td id="expectedAnnualExpense">0</td>
+                <td id="expenseComment"></td>
+            </tr>
+            <tr>
+                <td>Available Corpus is No of Times Annual Expense</td>
+                <td id="corpusTimesExpense">0</td>
+                <td id="corpusTimesExpenseComment"></td>
+            </tr>
+            <tr>
+                <td>4% of the Total Portfolio Value</td>
+                <td id="fourPercentPortfolio">0</td>
+                <td id="fourPercentComment"></td>
+            </tr>
+        </tbody>
+    </table>
+  <!-- Different Market Return Scenarios -->
+<h2>Different Market Return Scenarios (Corpus at the Age of Retirement)</h2>
+  <p style="color: blue; font-weight: bold;">Understand the effect of different market returns on your retirement corpus by asset class.</p>
+
+<table id="marketReturnScenariosTable">
+    <thead>
+        <tr>
+            <th>Asset Class</th>
+            <th>-3% Return</th>
+            <th>-2% Return</th>
+            <th>-1% Return</th>
+            <th>Corpus at Expected Annual Return (XX%)</th>
+            <th>Corpus at +1% Return</th>
+            <th>Corpus at +2% Return</th>
+            <th>Corpus at +3% Return</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rows will be dynamically generated here -->
+    </tbody>
+</table>
+
+  <h2>Retirement Age Sensitivity Analysis</h2>
+  <p style="color: blue; font-weight: bold;">Evaluate the monthly and annual savings required to retire at different ages with 35X of your annual expenses at the time of retirement, Expected average portfolio return (% p.a.) is assumed</p>
+
+<table id="sensitivityAnalysisTable">
+    <thead>
+        <tr>
+            <th>Retirement Age</th>
+            <th>Required Monthly Savings</th>
+            <th>Required Annual Savings</th>
+            <th>Corpus at Retirement</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+    <!-- Inflation-Adjusted Corpus Table -->
+    <h2>Inflation-Adjusted Corpus</h2>
+  <p style="color: blue; font-weight: bold;">Compare your corpus with and without inflation adjustments to see future value.</p>
+
+    <table id="inflationAdjustedCorpusTable">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Age</th>
+                <th>Corpus Without Inflation</th>
+                <th>Corpus With Inflation (Adjusted)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Targeted Corpus Table -->
+    <h2>Targeted Corpus</h2>
+  <p style="color: blue; font-weight: bold;">View the monthly and annual savings required to reach your targeted corpus. (Your current balance and expected average portfolio return (% p.a.) are considered)</p>
+
+    <table id="targetedCorpusTable">
+        <thead>
+            <tr>
+                <th>Targeted Corpus</th>
+                <th>Amount (Rs)</th>
+                <th>Required Monthly Saving to Achieve this Target</th>
+                <th>Required Annual Saving to Achieve this Target</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("generateButton").addEventListener("click", generateAssetClasses);
+            document.getElementById("calculateButton").addEventListener("click", function () {
+            calculateRetirement();  // Step 1: Perform all calculations first
+
+            // Step 2: Ensure Progress Bar & Countdown Update AFTER Calculations
+            setTimeout(() => {
+                updateProgressBar();  
+                calculateRetirementCountdown();
+            }, 10);  
+            });
+
+            // Automatically update on page load
+            generateAssetClasses(); // Automatically generate asset classes on page load
+
+            calculateRetirement();
+            updateProgressBar();
+            calculateRetirementCountdown();
+            
+        });
+      function calculateSensitivityAnalysis() {
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAges = [currentAge + 4, currentAge + 8, currentAge + 12, currentAge + 16, currentAge + 20, currentAge + 24, currentAge + 28, currentAge + 32];
+    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+
+    // Calculate the current portfolio value (sum of all asset class initial balances)
+    const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
+    let currentPortfolioValue = 0;
+    for (let i = 1; i <= assetClassCount; i++) {
+        currentPortfolioValue += parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+    }
+
+    const tableBody = document.getElementById("sensitivityAnalysisTable").getElementsByTagName("tbody")[0];
+    tableBody.innerHTML = "";
+
+    retirementAges.forEach(retirementAge => {
+        const yearsToRetirement = retirementAge - currentAge;
+
+        // Calculate expected annual expense at retirement
+        const expectedAnnualExpenseAtRetirement = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsToRetirement);
+
+        // Calculate targeted corpus (35x annual expense)
+        const targetedCorpus = expectedAnnualExpenseAtRetirement * 35;
+
+        // Calculate the future value of the current portfolio
+        const futureValueOfCurrentPortfolio = currentPortfolioValue * Math.pow(1 + expectedReturn, yearsToRetirement);
+
+        // Calculate the additional corpus needed
+        const additionalCorpusNeeded = targetedCorpus - futureValueOfCurrentPortfolio;
+
+        // Calculate required monthly and annual savings
+        const rate = expectedReturn / 12;
+        const periods = yearsToRetirement * 12;
+        const requiredMonthlySaving = (additionalCorpusNeeded * rate) / (Math.pow(1 + rate, periods) - 1);
+        const requiredAnnualSaving = requiredMonthlySaving * 12;
+
+        // Add row to the table
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = retirementAge;
+        row.insertCell(1).innerText = formatCurrency(requiredMonthlySaving);
+        row.insertCell(2).innerText = formatCurrency(requiredAnnualSaving);
+        row.insertCell(3).innerText = formatCurrency(targetedCorpus);
+    });
+}
+
+function updateProgressBar() {
+    const totalBalanceAtRetirement = parseFloat(document.getElementById("corpusAtRetirement").innerText.replace(/[^0-9.-]+/g, ""));
+    const retirementGoal = parseFloat(document.getElementById("retirementGoal").value);
+    
+    let progress = (totalBalanceAtRetirement / retirementGoal) * 100;
+    progress = Math.min(progress, 100); // Ensures it doesn't exceed 100%
+
+    const progressBar = document.getElementById("progressBar");
+    progressBar.style.width = `${progress}%`;
+    progressBar.innerText = `${progress.toFixed(2)}%`;  // Display percentage inside the bar
+
+    // Change color based on progress level
+    if (progress < 50) {
+        progressBar.style.background = "linear-gradient(to right, #ff4d4d, #ff1a1a)"; // Red for low progress
+    } else if (progress < 80) {
+        progressBar.style.background = "linear-gradient(to right, #ffcc00, #ff9900)"; // Yellow for medium progress
+    } else {
+        progressBar.style.background = "linear-gradient(to right, #28a745, #218838)"; // Green for high progress
+    }
+
+    document.getElementById("progressText").innerText = `${progress.toFixed(2)}% of goal achieved by retirement age`;
+}
+
+
+function calculateRetirementCountdown() {
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAge = parseInt(document.getElementById("retirementAge").value);
+    const currentDate = new Date();
+    const retirementDate = new Date(currentDate.getFullYear() + (retirementAge - currentAge), currentDate.getMonth(), currentDate.getDate());
+
+    const timeDiff = retirementDate - currentDate;
+    const yearsLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365));
+    const monthsLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+    const daysLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+
+    document.getElementById("retirementCountdown").innerText = `${yearsLeft} Years`;
+}
+        function generateAssetClasses() {
+            const count = document.getElementById("assetClassCount").value;
+            const tableBody = document.getElementById("assetClassTable").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = "";
+
+            // Prefilled values for asset classes
+            const assetClasses = [
+                {
+                    name: "Equity",
+                    initialBalance: 1500000,
+                    regularDeposit: 15000,
+                    annualReturn: 11,
+                    depositFrequency: 12,
+                    depositTerm: 15
+                },
+                {
+                    name: "Fixed Income",
+                    initialBalance: 1000000,
+                    regularDeposit: 8000,
+                    annualReturn: 8,
+                    depositFrequency: 4,
+                    depositTerm: 15
+                },
+                {
+                    name: "Gold",
+                    initialBalance: 500000,
+                    regularDeposit: 3000,
+                    annualReturn: 6,
+                    depositFrequency: 2,
+                    depositTerm: 15
+                }
+            ];
+
+            for (let i = 0; i < count; i++) {
+                const row = tableBody.insertRow();
+                const assetClass = assetClasses[i] || {
+                    name: `Asset ${i + 1}`,
+                    initialBalance: 1000000,
+                    regularDeposit: 20000,
+                    annualReturn: 8,
+                    depositFrequency: 12,
+                    depositTerm: 30
+                };
+
+                row.innerHTML = `
+                    <td><input type="text" id="assetClass${i + 1}Name" value="${assetClass.name}"></td>
+                    <td><input type="number" id="assetClass${i + 1}Balance" value="${assetClass.initialBalance}"></td>
+                    <td><input type="number" id="assetClass${i + 1}Deposit" value="${assetClass.regularDeposit}"></td>
+                    <td><input type="number" id="assetClass${i + 1}Return" value="${assetClass.annualReturn}"></td>
+                    <td><input type="number" id="assetClass${i + 1}Frequency" value="${assetClass.depositFrequency}"></td>
+                    <td><input type="number" id="assetClass${i + 1}DepositTerm" value="${assetClass.depositTerm}"></td>
+                `;
+            }
+        }
+function calculateMarketReturnScenarios1() {
+    const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
+    const yearsToRetirement = parseInt(document.getElementById("retirementAge").value) - parseInt(document.getElementById("currentAge").value);
+    const tableBody = document.getElementById("marketReturnScenariosTable").getElementsByTagName("tbody")[0];
+    tableBody.innerHTML = "";
+
+    let totalCorpusAtExpectedReturn = 0;
+    let totalCorpusAtMinus3 = 0;
+    let totalCorpusAtMinus2 = 0;
+    let totalCorpusAtMinus1 = 0;
+    let totalCorpusAtPlus1 = 0;
+    let totalCorpusAtPlus2 = 0;
+    let totalCorpusAtPlus3 = 0;
+
+    for (let i = 1; i <= assetClassCount; i++) {
+        const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+        const deposit = parseFloat(document.getElementById(`assetClass${i}Deposit`).value) || 0;
+        const expectedReturn = parseFloat(document.getElementById(`assetClass${i}Return`).value) / 100 || 0;
+        const depositFrequency = parseInt(document.getElementById(`assetClass${i}Frequency`).value) || 1;
+        const depositTerm = parseInt(document.getElementById(`assetClass${i}DepositTerm`).value) || 1;
+        const assetName = document.getElementById(`assetClass${i}Name`).value;
+
+        const corpusAtExpectedReturn = calculateCorpus(initialBalance, deposit, expectedReturn, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtMinus3 = calculateCorpus(initialBalance, deposit, expectedReturn - 0.03, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtMinus2 = calculateCorpus(initialBalance, deposit, expectedReturn - 0.02, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtMinus1 = calculateCorpus(initialBalance, deposit, expectedReturn - 0.01, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtPlus1 = calculateCorpus(initialBalance, deposit, expectedReturn + 0.01, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtPlus2 = calculateCorpus(initialBalance, deposit, expectedReturn + 0.02, depositFrequency, depositTerm, yearsToRetirement);
+        const corpusAtPlus3 = calculateCorpus(initialBalance, deposit, expectedReturn + 0.03, depositFrequency, depositTerm, yearsToRetirement);
+
+        totalCorpusAtExpectedReturn += corpusAtExpectedReturn;
+        totalCorpusAtMinus3 += corpusAtMinus3;
+        totalCorpusAtMinus2 += corpusAtMinus2;
+        totalCorpusAtMinus1 += corpusAtMinus1;
+        totalCorpusAtPlus1 += corpusAtPlus1;
+        totalCorpusAtPlus2 += corpusAtPlus2;
+        totalCorpusAtPlus3 += corpusAtPlus3;
+
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = assetName;
+        row.insertCell(1).innerText = formatCurrency(corpusAtMinus3);
+        row.insertCell(2).innerText = formatCurrency(corpusAtMinus2);
+        row.insertCell(3).innerText = formatCurrency(corpusAtMinus1);
+        row.insertCell(4).innerText = formatCurrency(corpusAtExpectedReturn);
+        row.insertCell(5).innerText = formatCurrency(corpusAtPlus1);
+        row.insertCell(6).innerText = formatCurrency(corpusAtPlus2);
+        row.insertCell(7).innerText = formatCurrency(corpusAtPlus3);
+    }
+
+    // Add Total row
+    const totalRow = tableBody.insertRow();
+    totalRow.insertCell(0).innerText = "Total";
+    totalRow.insertCell(1).innerText = formatCurrency(totalCorpusAtMinus3);
+    totalRow.insertCell(2).innerText = formatCurrency(totalCorpusAtMinus2);
+    totalRow.insertCell(3).innerText = formatCurrency(totalCorpusAtMinus1);
+    totalRow.insertCell(4).innerText = formatCurrency(totalCorpusAtExpectedReturn);
+    totalRow.insertCell(5).innerText = formatCurrency(totalCorpusAtPlus1);
+    totalRow.insertCell(6).innerText = formatCurrency(totalCorpusAtPlus2);
+    totalRow.insertCell(7).innerText = formatCurrency(totalCorpusAtPlus3);
+}
+
+function calculateCorpus(initialBalance, deposit, annualReturn, depositFrequency, depositTerm, yearsToRetirement) {
+    let balance = initialBalance;
+    for (let year = 1; year <= yearsToRetirement; year++) {
+        if (year <= depositTerm) {
+            balance += deposit * depositFrequency;
+        }
+        balance *= (1 + annualReturn);
+    }
+    return balance;
+}
+        function calculateRetirement() {
+            const currentAge = parseInt(document.getElementById("currentAge").value);
+            const retirementAge = parseInt(document.getElementById("retirementAge").value);
+            const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
+            const yearsToRetirement = retirementAge - currentAge; // Years until retirement
+            const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
+            const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+            const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+            const retirementGoal = parseFloat(document.getElementById("retirementGoal").value);
+            let labels = [];
+            let datasets = [];
+            let summaryTable = document.getElementById("summaryTable").getElementsByTagName("tbody")[0];
+            let expenseTable = document.getElementById("expenseTable").getElementsByTagName("tbody")[0];
+            let allocationStatusTable = document.getElementById("allocationStatusTable").getElementsByTagName("tbody")[0];
+            let portfolioGrowthTable = document.getElementById("portfolioGrowthTable").getElementsByTagName("tbody")[0];
+            let inflationAdjustedCorpusTable = document.getElementById("inflationAdjustedCorpusTable").getElementsByTagName("tbody")[0];
+            summaryTable.innerHTML = "";
+            expenseTable.innerHTML = "";
+            allocationStatusTable.innerHTML = "";
+            portfolioGrowthTable.innerHTML = "";
+            inflationAdjustedCorpusTable.innerHTML = "";
+
+            // Update the displayed ages in the table header
+            document.getElementById("currentAgeDisplay").innerText = currentAge;
+            document.getElementById("retirementAgeDisplay").innerText = retirementAge;
+
+            let totalPortfolioData = new Array(yearsToRetirement).fill(0); // For chart (up to retirement age)
+            let assetClassBalances = [];
+            let assetClassReturns = [];
+            let assetClassNames = [];
+            let currentAssetAllocation = [];
+            let retirementAssetAllocation = [];
+
+            // Initialize variables for totals
+            let totalInitialBalance = 0;
+            let totalInvestedAmount = 0;
+            let totalInterestEarned = 0;
+
+            // Calculate total initial balance once
+            for (let i = 1; i <= assetClassCount; i++) {
+                const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+                totalInitialBalance += initialBalance;
+            }
+calculateRetirementCountdown();
+          updateProgressBar();
+          calculateSensitivityAnalysis();
+    calculateMarketReturnScenarios();
+    calculateMarketReturnScenarios1()
+
+            // Calculate total balance at retirement for retirement allocation percentages
+            let totalBalanceAtRetirement = 0;
+
+            for (let i = 1; i <= assetClassCount; i++) {
+                const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+                const deposit = parseFloat(document.getElementById(`assetClass${i}Deposit`).value) || 0;
+                const annualReturn = parseFloat(document.getElementById(`assetClass${i}Return`).value) / 100 || 0;
+                const depositFrequency = parseInt(document.getElementById(`assetClass${i}Frequency`).value) || 1;
+                const depositTerm = parseInt(document.getElementById(`assetClass${i}DepositTerm`).value) || 1;
+                const assetName = document.getElementById(`assetClass${i}Name`).value;
+
+                let balance = initialBalance;
+                let dataPoints = []; // For chart (up to retirement age)
+                let totalInvested = initialBalance; // Start with initial balance
+                let totalInterest = 0;
+
+                // Calculate only up to retirement age for both Retirement Summary table and chart
+                for (let year = 1; year <= yearsToRetirement; year++) {
+                    if (year <= depositTerm) {
+                        balance += deposit * depositFrequency;
+                        totalInvested += deposit * depositFrequency;
+                    }
+                    let interest = balance * annualReturn;
+                    balance += interest;
+                    totalInterest += interest;
+
+                    // Store balance at retirement
+                    if (year === yearsToRetirement) {
+                        assetClassBalances.push(balance);
+                        assetClassReturns.push(annualReturn);
+                        assetClassNames.push(assetName);
+                        retirementAssetAllocation.push(balance);
+                        totalBalanceAtRetirement += balance;
+                    }
+
+                    // Add data point for chart
+                    dataPoints.push(balance);
+                    totalPortfolioData[year - 1] += balance;
+                }
+
+                // Sum up the values for the totals
+                totalInvestedAmount += totalInvested;
+                totalInterestEarned += totalInterest;
+
+                // Add row to the Retirement Summary table
+                let summaryRow = summaryTable.insertRow();
+                summaryRow.insertCell(0).innerText = assetName;
+                summaryRow.insertCell(1).innerText = retirementAge;
+                summaryRow.insertCell(2).innerText = formatCurrency(initialBalance);
+                summaryRow.insertCell(3).innerText = formatCurrency(totalInvested);
+                summaryRow.insertCell(4).innerText = formatCurrency(totalInterest);
+                summaryRow.insertCell(5).innerText = formatCurrency(balance);
+
+                // Add dataset for chart
+                datasets.push({ label: assetName, data: dataPoints, borderColor: getRandomColor(), fill: false });
+            }
+
+            // Add Total Portfolio to the chart
+            datasets.push({ label: "Total Portfolio", data: totalPortfolioData, borderColor: "#000000", fill: false });
+
+            // Add Total row to the summary table
+            let totalRow = summaryTable.insertRow();
+            totalRow.insertCell(0).innerText = "Total Portfolio";
+            totalRow.insertCell(1).innerText = retirementAge;
+            totalRow.insertCell(2).innerText = formatCurrency(totalInitialBalance); // Total Initial Balance
+            totalRow.insertCell(3).innerText = formatCurrency(totalInvestedAmount); // Total Invested Amount
+            totalRow.insertCell(4).innerText = formatCurrency(totalInterestEarned); // Total Interest Earned
+            totalRow.insertCell(5).innerText = formatCurrency(totalPortfolioData[yearsToRetirement - 1]); // Total Portfolio Value
+
+            // Calculate asset allocation percentages
+            const summaryRows = summaryTable.rows;
+            for (let i = 0; i < summaryRows.length - 1; i++) { // Skip the last row (Total Portfolio)
+                const row = summaryRows[i];
+                const initialBalance = parseFloat(row.cells[2].innerText.replace(/[^0-9.-]+/g, ""));
+                const totalBalance = parseFloat(row.cells[5].innerText.replace(/[^0-9.-]+/g, ""));
+
+                // Calculate current allocation percentage
+                const currentAllocationPercent = ((initialBalance / totalInitialBalance) * 100).toFixed(2);
+
+                // Calculate retirement allocation percentage
+                const retirementAllocationPercent = ((totalBalance / totalBalanceAtRetirement) * 100).toFixed(2);
+
+                // Add row to the Asset Allocation Status table
+                let allocationRow = allocationStatusTable.insertRow();
+                allocationRow.insertCell(0).innerText = row.cells[0].innerText; // Asset Class Name
+                allocationRow.insertCell(1).innerText = `${currentAllocationPercent}%`;
+                allocationRow.insertCell(2).innerText = `${retirementAllocationPercent}%`;
+            }
+
+            // Add Total row to the Asset Allocation Status table
+            let totalAllocationRow = allocationStatusTable.insertRow();
+            totalAllocationRow.insertCell(0).innerText = "Total";
+            totalAllocationRow.insertCell(1).innerText = "100%";
+            totalAllocationRow.insertCell(2).innerText = "100%";
+
+            // Generate labels for x-axis (ages)
+            for (let year = 0; year < yearsToRetirement; year++) {
+                labels.push(currentAge + year);
+            }
+
+            // Calculate weighted average return
+            let weightedAverageReturn = assetClassBalances.reduce((sum, balance, index) => {
+                return sum + (balance / totalBalanceAtRetirement) * assetClassReturns[index];
+            }, 0);
+
+            // Calculate expected expense per month at retirement
+            let yearsOfInflation = retirementAge - currentAge;
+            let expectedExpensePerMonth = currentExpenditure * Math.pow(1 + expectedInflation, yearsOfInflation);
+            let expectedAnnualExpense = expectedExpensePerMonth * 12;
+
+            // Calculate interest amount from portfolio
+            let interestAmountPerYear = totalBalanceAtRetirement * weightedAverageReturn;
+            let interestAmountPerMonth = interestAmountPerYear / 12;
+
+            // Check if portfolio is sufficient
+            let isPortfolioSufficient = interestAmountPerMonth >= expectedExpensePerMonth;
+
+            // Add data to the expense table
+            let expenseRow = expenseTable.insertRow();
+            expenseRow.insertCell(0).innerText = retirementAge;
+            expenseRow.insertCell(1).innerText = formatCurrency(expectedExpensePerMonth);
+            expenseRow.insertCell(2).innerText = formatCurrency(interestAmountPerMonth);
+            expenseRow.insertCell(3).innerText = isPortfolioSufficient ? "Yes(Only first year after retirement is considered)" : "Need careful consideration";
+
+            // Update Retirement Readiness Table
+            document.getElementById("retirementAgeReadiness").innerText = retirementAge;
+            document.getElementById("corpusAtRetirement").innerText = formatCurrency(totalBalanceAtRetirement);
+            document.getElementById("corpusComment").innerText = totalBalanceAtRetirement >= retirementGoal ? "More Than Retirement Goal Amount" : "Less Than Retirement Goal Amount";
+            document.getElementById("expectedAnnualExpense").innerText = formatCurrency(expectedAnnualExpense);
+            document.getElementById("expenseComment").innerText = isPortfolioSufficient ? "Portfolio estimated return is greater than this amount" : "Portfolio estimated return is smaller than this amount";
+            let corpusTimesExpense = (totalBalanceAtRetirement / expectedAnnualExpense).toFixed(2);
+            document.getElementById("corpusTimesExpense").innerText = corpusTimesExpense;
+            document.getElementById("corpusTimesExpenseComment").innerText = corpusTimesExpense >= 35 && corpusTimesExpense <= 60 ? "Your Retirement Corpus is reasonably Good" : "Your Retirement Corpus may not be sufficient";
+            let fourPercentPortfolio = (totalBalanceAtRetirement * 0.04).toFixed(2);
+            document.getElementById("fourPercentPortfolio").innerText = formatCurrency(fourPercentPortfolio);
+            document.getElementById("fourPercentComment").innerText = fourPercentPortfolio >= expectedAnnualExpense ? "More than Expected Annual Expense" : "Less than Expected Annual Expense";
+
+            // Populate Portfolio Growth Over Time Table
+            for (let year = 0; year < yearsToRetirement; year += 4) {
+                let row = portfolioGrowthTable.insertRow();
+                row.insertCell(0).innerText = currentAge + year;
+                for (let i = 0; i < assetClassCount; i++) {
+                    row.insertCell(i + 1).innerText = formatCurrency(datasets[i].data[year]);
+                }
+                row.insertCell(assetClassCount + 1).innerText = formatCurrency(totalPortfolioData[year]);
+            }
+
+            // Update the Check Before You Start Investing table
+            const emergencyFund = parseFloat(document.getElementById("emergencyFund").value) || 0;
+            const termPlanAssurance = parseFloat(document.getElementById("termPlanAssurance").value) || 0;
+
+            document.getElementById("emergencyFundDisplay").innerText = formatCurrency(emergencyFund);
+            document.getElementById("termPlanCoverageDisplay").innerText = formatCurrency(termPlanAssurance);
+
+            // Populate Inflation-Adjusted Corpus Table
+            for (let year = 0; year <= yearsToRetirement; year += 5) {
+                const age = currentAge + year;
+                const corpusWithoutInflation = totalPortfolioData[year - 1] || totalInitialBalance;
+                const corpusWithInflation = corpusWithoutInflation / Math.pow(1 + expectedInflation, year);
+
+                let row = inflationAdjustedCorpusTable.insertRow();
+                row.insertCell(0).innerText = new Date().getFullYear() + year;
+                row.insertCell(1).innerText = age;
+                row.insertCell(2).innerText = formatCurrency(corpusWithoutInflation);
+                row.insertCell(3).innerText = formatCurrency(corpusWithInflation);
+            }
+
+            // Calculate and populate the Targeted Corpus table
+            calculateTargetedCorpus();
+          
+
+            renderChart(labels, datasets);
+        }
+
+        function calculateTargetedCorpus() {
+            const currentAge = parseInt(document.getElementById("currentAge").value);
+            const retirementAge = parseInt(document.getElementById("retirementAge").value);
+            const yearsToRetirement = retirementAge - currentAge;
+            const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+            const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+            const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+
+            // Calculate expected annual expense at retirement
+            const expectedAnnualExpenseAtRetirement = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsToRetirement);
+
+            // Multiples of annual expenses to target
+            const multiples = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+
+            const tableBody = document.getElementById("targetedCorpusTable").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            multiples.forEach(multiple => {
+                const targetedCorpus = expectedAnnualExpenseAtRetirement * multiple;
+
+                // Calculate required monthly and annual savings
+                const futureValue = targetedCorpus;
+                const rate = expectedReturn / 12;
+                const periods = yearsToRetirement * 12;
+                const requiredMonthlySaving = (futureValue * rate) / (Math.pow(1 + rate, periods) - 1);
+                const requiredAnnualSaving = requiredMonthlySaving * 12;
+
+                // Add row to the table
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
+                row.insertCell(1).innerText = formatCurrency(targetedCorpus);
+                row.insertCell(2).innerText = formatCurrency(requiredMonthlySaving);
+                row.insertCell(3).innerText = formatCurrency(requiredAnnualSaving);
+            });
+        }
+
+        function renderChart(labels, datasets) {
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+            window.myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets.map((dataset, index) => ({
+                    ...dataset,
+                    borderColor: [
+                            "#1F77B4", // Blue
+                            "#FF7F0E", // Orange
+                            "#2CA02C", // Green
+                            "#D62728", // Red
+                            "#9467BD"  // Purple
+                        ][index % 5],// Apply a different color to each dataset
+                        backgroundColor: "transparent",
+                        pointBackgroundColor: "#ffffff",
+                        pointBorderColor: "#000000",
+                        pointRadius: 1, // Slightly larger points for better visibility
+                        borderWidth: 3, // Thicker lines for better contrast
+                        fill: false
+                }))
+            },
+
+
+            options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false // Hide default legend (we add a custom one)
+            }
+        },
+        layout: {
+            padding: { top: 20, left: 20 }
+        },
+        scales: {
+            x: {
+                type: "linear",
+                position: "bottom",
+                title: { display: true, text: "Age" }
+            },
+            y: {
+                title: { display: true, text: "Portfolio Value (INR)" }
+            }
+        }
+    },
+    plugins: [
+        {
+            id: "customLegend",
+            afterDraw(chart) {
+                const { ctx, chartArea: { left, top } } = chart;
+                ctx.save();
+                
+                // Background box for legend
+                ctx.fillStyle = "rgba(255, 255, 153, 0.3)";
+                ctx.fillRect(left + 20, top + 10, 160, datasets.length * 20 + 10);
+
+                // Draw legend items
+                datasets.forEach((dataset, index) => {
+                    const color = dataset.borderColor;
+                    ctx.fillStyle = color;
+                    ctx.fillRect(left + 25, top + 20 + index * 20, 10, 10); // Color box
+                    ctx.fillStyle = "black";
+                    ctx.fillText(dataset.label, left + 40, top + 30 + index * 20); // Text label
+                });
+
+                ctx.restore();
+            }
+        }
+    ]
+});
+
+        }
+function calculateTargetedCorpus() {
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAge = parseInt(document.getElementById("retirementAge").value);
+    const yearsToRetirement = retirementAge - currentAge;
+    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+
+    // Calculate expected annual expense at retirement
+    const expectedAnnualExpenseAtRetirement = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsToRetirement);
+
+    // Get the current portfolio value
+    const totalInitialBalance = Array.from({ length: parseInt(document.getElementById("assetClassCount").value) }, (_, i) => {
+        return parseFloat(document.getElementById(`assetClass${i + 1}Balance`).value) || 0;
+    }).reduce((sum, balance) => sum + balance, 0);
+
+    // Multiples of annual expenses to target
+    const multiples = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+
+    const tableBody = document.getElementById("targetedCorpusTable").getElementsByTagName("tbody")[0];
+    tableBody.innerHTML = ""; // Clear existing rows
+
+    multiples.forEach(multiple => {
+        const targetedCorpus = expectedAnnualExpenseAtRetirement * multiple;
+
+        // Calculate the future value of the current portfolio
+        const futureValueOfCurrentPortfolio = totalInitialBalance * Math.pow(1 + expectedReturn, yearsToRetirement);
+
+        // Calculate the required future value to reach the targeted corpus
+        const requiredFutureValue = targetedCorpus - futureValueOfCurrentPortfolio;
+
+        // Calculate required monthly and annual savings
+        const rate = expectedReturn / 12;
+        const periods = yearsToRetirement * 12;
+        const requiredMonthlySaving = (requiredFutureValue * rate) / (Math.pow(1 + rate, periods) - 1);
+        const requiredAnnualSaving = requiredMonthlySaving * 12;
+
+        // Add row to the table
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
+        row.insertCell(1).innerText = formatCurrency(targetedCorpus);
+        row.insertCell(2).innerText = formatCurrency(requiredMonthlySaving);
+        row.insertCell(3).innerText = formatCurrency(requiredAnnualSaving);
+    });
+}
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 50%)`;
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
+        }
+    </script>
+
+
+<!-- Investment Growth vs. Inflation Scatter Plot -->
+<h2>Investment Growth vs. Inflation</h2>
+<div style="width: 60%; height: 500px; margin: auto; background-color: rgba(255, 255, 153, 0.3); padding: 10px; border-radius: 10px;">
+    <canvas id="investmentInflationScatterChart"></canvas>
+</div>
+
+<script>
+    function renderInvestmentInflationScatterPlot() {
+        const currentAge = parseInt(document.getElementById("currentAge").value);
+        const retirementAge = parseInt(document.getElementById("retirementAge").value);
+        if (isNaN(currentAge) || isNaN(retirementAge) || currentAge >= retirementAge) return;
+
+        const ageStep = Math.max(1, Math.floor((retirementAge - currentAge) / 5));
+        const ages = Array.from({ length: 6 }, (_, i) => currentAge + i * ageStep);
+
+        const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+        const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+        const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
+
+        let totalPortfolio = 0;
+        for (let i = 1; i <= assetClassCount; i++) {
+            totalPortfolio += parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+        }
+
+        let portfolioData = [];
+        let inflationData = [];
+
+        ages.forEach(age => {
+            let yearsElapsed = age - currentAge;
+            let inflationAdjustedExpense = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsElapsed);
+            let portfolioGrowth = totalPortfolio * Math.pow(1.07, yearsElapsed);
+
+            portfolioData.push({ x: age, y: portfolioGrowth });
+            inflationData.push({ x: age, y: inflationAdjustedExpense });
+        });
+
+        const ctx = document.getElementById("investmentInflationScatterChart").getContext("2d");
+        if (window.investmentInflationChart instanceof Chart) {
+            window.investmentInflationChart.destroy();
+        }
+        window.investmentInflationChart = new Chart(ctx, {
+        type: "scatter",
+        data: {
+            datasets: [
+                {
+                    label: "Portfolio Growth",
+                    data: portfolioData,
+                    backgroundColor: "rgba(0, 0, 255, 0.5)",
+                    borderColor: "blue",
+                    pointRadius: 4,
+                    fill: true
+                },
+                {
+                    label: "Inflation-Adjusted Expenses",
+                    data: inflationData,
+                    backgroundColor: "rgba(255, 0, 0, 0.5)",
+                    borderColor: "red",
+                    pointRadius: 4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false // Hide default legend
+            }
+        },
+        layout: {
+            padding: { top: 20, left: 20 } // Adjusts space for custom legend
+        },
+        scales: {
+            x: {
+                type: "linear",
+                position: "bottom",
+                title: { display: true, text: "Age" }
+            },
+            y: {
+                title: { display: true, text: "Value (INR)" }
+            }
+        }
+    },
+    plugins: [
+        {
+            id: "customLegend",
+            afterDraw(chart) {
+                const { ctx, chartArea: { left, top } } = chart;
+                ctx.save();
+                ctx.fillStyle = "rgba(255, 255, 153, 0.3)"; // Light background box
+                ctx.fillRect(left + 20, top + 25, 140, 40); // Legend box position & size
+
+                // Portfolio Growth Legend
+                ctx.fillStyle = "blue";
+                ctx.fillRect(left + 20, top + 35, 10, 10);
+                ctx.fillStyle = "black";
+                ctx.fillText("Portfolio Growth", left + 35, top + 43);
+
+                // Inflation Legend
+                ctx.fillStyle = "red";
+                ctx.fillRect(left + 20, top + 50, 10, 10);
+                ctx.fillStyle = "black";
+                ctx.fillText("Inflation-Adjusted", left + 35, top + 58);
+
+                ctx.restore();
+            }
+        }
+    ]
+});
+
+
+    }
+
+    document.addEventListener("DOMContentLoaded", renderInvestmentInflationScatterPlot);
+
+    // Attach event listeners to all inputs
+    document.querySelectorAll("input").forEach(input => {
+        input.addEventListener("input", renderInvestmentInflationScatterPlot);
+    });
+</script>
+
+
+
+<h2>Scatter Area Plot for Different Market Return Scenarios</h2>
+<p style="color: blue; font-weight: bold;">Visualize how different return scenarios affect your retirement corpus.</p>
+<div style="width: 80%; height: 600px; margin: auto; background-color: rgba(173, 216, 230, 0.3); padding: 10px; border-radius: 10px;">
+    <canvas id="marketReturnScatterChart"></canvas>
+</div>
+
+<script>
+    function calculateMarketReturnScenarios() {
+        const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
+        const currentAge = parseInt(document.getElementById("currentAge").value);
+        const retirementAge = parseInt(document.getElementById("retirementAge").value);
+        const minAge = currentAge - 5;
+        const maxAge = retirementAge + 5;
+        const returnRates = [-0.03, -0.02, -0.01, 0, 0.01, 0.02, 0.03];
+        let datasets = [];
+        let seriesNames = ["-3% Return", "-2% Return", "-1% Return", "Expected Return", "+1% Return", "+2% Return", "+3% Return"];
+        let colors = ["rgba(255, 0, 0, 0.4)", "rgba(255, 165, 0, 0.4)", "rgba(255, 255, 0, 0.4)", "rgba(0, 128, 0, 0.4)", "rgba(0, 0, 255, 0.4)", "rgba(75, 0, 130, 0.4)", "rgba(238, 130, 238, 0.4)"];
+        let minCorpus = Infinity, maxCorpus = -Infinity;
+
+        for (let i = 0; i < 7; i++) {
+            datasets.push({
+                label: seriesNames[i],
+                data: [],
+                backgroundColor: colors[i],
+                borderColor: colors[i].replace("0.4", "1"),
+                fill: true,
+                pointRadius: 3
+            });
+        }
+
+        for (let year = currentAge; year <= retirementAge; year += 5) {
+
+            returnRates.forEach((rate, index) => {
+                let corpusValue = 0;
+                for (let i = 1; i <= assetClassCount; i++) {
+                    const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
+                    const deposit = parseFloat(document.getElementById(`assetClass${i}Deposit`).value) || 0;
+                    const expectedReturn = parseFloat(document.getElementById(`assetClass${i}Return`).value) / 100 || 0;
+                    const depositFrequency = parseInt(document.getElementById(`assetClass${i}Frequency`).value) || 1;
+                    const depositTerm = parseInt(document.getElementById(`assetClass${i}DepositTerm`).value) || 1;
+                    corpusValue += calculateCorpus(initialBalance, deposit, expectedReturn + rate, depositFrequency, depositTerm, Math.max(year - currentAge, 0));
+                }
+                corpusValue = Math.round(corpusValue / 1e4) * 1e4; // Normalize corpus values
+                datasets[index].data.push({ x: year, y: corpusValue });
+                minCorpus = Math.min(minCorpus, corpusValue);
+                maxCorpus = Math.max(maxCorpus, corpusValue);
+            });
+        }
+
+        let yMin = Math.floor(minCorpus / 1e4) * 1e4;
+        let yMax = Math.ceil(maxCorpus / 1e4) * 1e4 * 1.2; // Increase height by 20%
+        renderMarketReturnScatterPlot(datasets, minAge, maxAge, yMin, yMax);
+    }
+
+    function renderMarketReturnScatterPlot(datasets, minAge, maxAge, yMin, yMax) {
+        const ctx = document.getElementById("marketReturnScatterChart").getContext("2d");
+        if (window.marketReturnChart instanceof Chart) {
+            window.marketReturnChart.destroy();
+        }
+        window.marketReturnChart = new Chart(ctx, {
+        type: "line",
+        data: { datasets: datasets },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: { line: { tension: 0.3 } },
+            plugins: {
+                legend: {
+                    display: false // Hide default legend
+                }
+            },
+            layout: {
+                padding: { top: 20, left: 20 } // Adjusts space for the legend
+            },
+            scales: {
+                x: { 
+                    type: "linear", 
+                    position: "bottom", 
+                    title: { display: true, text: "Age" },
+                    min: minAge,
+                    max: maxAge,
+                    ticks: { stepSize: 5 }
+                },
+                y: { 
+                    type: "linear", 
+                    title: { display: true, text: "Corpus Value (INR)" },
+                    min: yMin,
+                    max: yMax,
+                    ticks: { stepSize: (yMax - yMin) / 5 }
+                }
+            }
+        },
+        plugins: [
+            {
+                id: "customLegend",
+                afterDraw(chart) {
+                    const { ctx, chartArea: { left, top } } = chart;
+                    ctx.save();
+                    ctx.fillStyle = "rgba(255, 255, 153, 0.3)"; // Light background box
+                    ctx.fillRect(left + 10, top + 10, 120, datasets.length * 18 ); // Adjust box size
+
+                    // ctx.fillStyle = "black";
+                    // ctx.font = "12px Arial";
+                    // ctx.fillText("Legend", left + 20, top + 25);
+
+                    datasets.forEach((dataset, index) => {
+                        ctx.fillStyle = dataset.borderColor;
+                        ctx.fillRect(left + 20, top + 10 + index * 18, 10, 10);
+                        ctx.fillStyle = "black";
+                        ctx.fillText(dataset.label, left + 35, top + 20 + index * 18);
+                    });
+
+                    ctx.restore();
+                }
+            }
+        ]
+    });
+    }
+    
+    document.querySelectorAll("#currentAge, #retirementAge, #assetClassCount, input[id^='assetClass']").forEach(input => {
+    input.addEventListener("input", calculateMarketReturnScenarios);
+});
+
+</script>
+
+<!-- Asset Allocation Pie Chart -->
+<h3>Asset Allocation Distribution</h3>
+<p style="color: blue; font-weight: bold;">Visualization for Assest Allocation Distribution on retirement age.</p>
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+    <canvas id="assetAllocationChart" style="max-width: 400px; max-height: 400px;"></canvas>
+    <div id="assetAllocationLegend" style="margin-top: 10px; text-align: center;"></div>
+</div>
+
+<script>
+function renderAssetAllocationPieChart() {
+    const tableRows = document.getElementById("allocationStatusTable").getElementsByTagName("tbody")[0].rows;
+    let labels = [];
+    let data = [];
+    let colors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#8e44ad'];
+
+    for (let i = 0; i < tableRows.length - 1; i++) { // Ignore total row
+        let cells = tableRows[i].cells;
+        labels.push(cells[0].innerText); // Asset Class Name
+        data.push(parseFloat(cells[2].innerText.replace("%", ""))); // Retirement Allocation %
+    }
+
+    const ctx = document.getElementById('assetAllocationChart').getContext('2d');
+    
+    if (window.assetChart) {
+        window.assetChart.destroy(); // Destroy previous chart instance to avoid duplicates
+    }
+
+    window.assetChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false // Hide default legend to use a custom one
+                },
+                datalabels: {
+                    color: 'white', // Show % inside chart
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: (value) => `${value}%`, // Show only percentage
+                    anchor: 'center',  // Position text towards the edge
+                    align: 'end',  // Align text away from center
+                    offset : 10,
+                    rotation: 75    // Rotate text by 45 degrees
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Enable datalabels plugin
+    });
+
+    // Generate Custom Legend (Names Outside the Chart)
+    let legendHtml = labels.map((label, index) => `
+        <span style="display: inline-block; margin: 5px; padding: 5px; border-radius: 5px; background-color: ${colors[index]}; color: white;">
+            ${label}
+        </span>
+    `).join(" ");
+
+    document.getElementById("assetAllocationLegend").innerHTML = legendHtml;
+}
+
+// Call the function after retirement calculation updates the table
+document.addEventListener("DOMContentLoaded", () => {
+    renderAssetAllocationPieChart();
+});
+</script>
+
+
+  <!-- Retirement Calculator Notes and Disclaimers -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-top: 20px; background-color: #f9f9f9;">
+    <h3 style="color: #d9534f;">Important Notes & Disclaimers</h3>
+    
+    <p><strong>1. No part of this calculator should be considered as an investment recommendation.</strong> Users are advised to consult a financial professional before making any investment decisions.</p>
+
+    <p><strong>2. This is not a financial planner</strong> but a <strong>basic retirement preparedness calculator</strong> designed to provide general estimates.</p>
+
+    <p><strong>3. The first section of the calculator includes some pre-filled data.</strong> Users should modify these values based on their current financial situation and personal preferences.</p>
+
+    <p><strong>4. Key assumptions used in calculations include:</strong></p>
+    <ul>
+        <li>Expected Annual Inflation Rate (%)</li>
+        <li>Expected Average Portfolio Return (% per annum)</li>
+        <li>Weighted Average Returns of the Portfolio</li>
+    </ul>
+    <p>These assumptions influence the different projected retirement amounts.</p>
+
+    <p><strong>5. The calculations and projections are based on general financial thumb rules</strong> and should not be interpreted as personalized financial advice.</p>
+
+    <p><strong>6. Actual results may vary significantly</strong> based on market conditions, changes in inflation, and individual investment choices.</p>
+
+    <p><strong>7. Past performance of any asset class or investment is not indicative of future returns.</strong> Users should exercise caution and conduct their own research.</p>
+</div>
+
+</body>
+</html>
+
