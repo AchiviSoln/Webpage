@@ -997,6 +997,7 @@ function calculateRetirement() {
         const initialBalance = parseFloat(document.getElementById(`assetClass${i}Balance`).value) || 0;
         totalInitialBalance += initialBalance;
     }
+calculateRetirementCountdown();
 
 updateProgressBar();
 calculateSensitivityAnalysis();
@@ -1195,6 +1196,7 @@ calculatePostRetirementPlan();
 
 function calculatePostRetirementPlan() {
     // Input Values
+    const currentAge = parseInt(document.getElementById("currentAge").value);
     const retirementAge = parseInt(document.getElementById("retirementAge").value);
     const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
     const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
@@ -1204,16 +1206,33 @@ function calculatePostRetirementPlan() {
     const corpusElement = document.getElementById("corpusAtRetirement").innerText;
     const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
 
+
+    // console.log("expectedInflation:",expectedInflation)
+    // console.log("OUtcome:",currentExpenditure * 12 * Math.pow(1 + expectedInflation))
+
     // Initialize Variables
     let corpus = totalCorpusAtRetirement;
     let results = [];
-
+    let d =60;
     // Calculate Post-Retirement Plan
     for (let age = retirementAge; age <= lifeExpectancy; age++) {
-        const yearsSinceRetirement = age - retirementAge;
+        // const yearsSinceRetirement = currentAge  + age;
+        // console.log("retireAge:",age);
+        // console.log("Current AGe:",currentAge);
+        // console.log("Age Inflation:",age-currentAge);
+        const testedValue = age - currentAge;
 
         // Calculate Expected Expense PA (Adjusted for Inflation)
-        const expectedExpensePA = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsSinceRetirement);
+        // Calculate expected expense per month at retirement
+        // let yearsOfInflation = retirementAge - currentAge;
+        // let expectedExpensePerMonth = currentExpenditure * Math.pow(1 + expectedInflation, yearsOfInflation);
+        // let expectedAnnualExpense = expectedExpensePerMonth * 12;
+
+
+        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
+        // console.log("OUtcome:", currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue))
+
+        // const expectedExpensePA =expectedAnnualExpense;
 
         // Calculate 4% Withdrawal
         const withdrawal = corpus * 0.04;
@@ -1223,10 +1242,11 @@ function calculatePostRetirementPlan() {
 
         // Calculate Corpus + Interest at Expected Rate
         const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
+        d +=1
 
         // Store Results
         results.push({
-            year: yearsSinceRetirement,
+            year: new Date().getFullYear() + age,
             age: age,
             corpus: corpus.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
             expectedExpensePA: expectedExpensePA.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
@@ -1341,9 +1361,9 @@ function renderAssetAllocationCharts(assetAllocationData) {
     retirementData.push(parseFloat(data.retirementAllocation));
     });
     
-    console.log("Labels:", labels);
-    console.log("Current Data:", currentData);
-    console.log("Retirement Data:", retirementData);
+    // console.log("Labels:", labels);
+    // console.log("Current Data:", currentData);
+    // console.log("Retirement Data:", retirementData);
 
     function createChart(chartId, labels, data, legendId) {
         const canvas = document.getElementById(chartId);
@@ -1660,6 +1680,7 @@ function calculateTargetedCorpus() {
 });
 
 </script>
+
 
 
   <!-- Retirement Calculator Notes and Disclaimers -->
