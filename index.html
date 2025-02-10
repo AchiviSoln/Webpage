@@ -423,7 +423,7 @@ th, td {
                 <th>Expected Annual Return (%)</th>
                 <th>Deposit Frequency (per year)</th>
                 <th>Deposit Term (Years)</th>
-                <th>Annual Increase in Investment (%)</th>
+                <!-- <th>Annual Increase in Investment (%)</th> -->
             </tr>
         </thead>
         <tbody>
@@ -492,29 +492,8 @@ th, td {
 
 <p style="color: blue; font-weight: bold;">Get adequate health insurance; explore super top-ups for extra protection.</p>
 
-<h2>Post-Retirement Corpus and Withdrawal Analysis</h2>
-<table id="postRetirementTable">
-    <thead>
-        <tr>
-            <th>Year</th>
-            <th>Age</th>
-            <th>Corpus</th>
-            <th>Expected Expense PA</th>
-            <th>4% Withdrawal</th>
-            <th>Corpus After Withdrawal</th>
-            <th>Corpus + Interest at Expected Rate</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Rows will be dynamically generated here -->
-    </tbody>
-</table>
-
-
-
 
 <h2>Retirement Corpus Growth Over the Years</h2>
-
 <!-- Chart -->
 <div class="chart-container">
     <canvas id="investmentChart"></canvas>
@@ -536,9 +515,7 @@ th, td {
     <tbody></tbody>
 </table>
 
-   
-
-    <!-- Asset Allocation Status -->
+ <!-- Asset Allocation Status -->
 <h2>Asset Allocation Status</h2>
 <p style="color: blue; font-weight: bold;">Thumb Rule: 100 - Age = Equity Exposure. Reduce equity exposure as you near retirement.</p>
 <p style="color: blue; font-weight: bold;">Comparison of Asset Allocation at Current Age and Retirement Age</p>
@@ -554,24 +531,24 @@ th, td {
         <div id="retirementAssetAllocationLegend" style="margin-top: 10px;"></div>
     </div>
 </div>
-    <!-- Portfolio Growth Over Time -->
-    <h2>Portfolio Growth Over Time</h2>
-  <p style="color: blue; font-weight: bold;">View your retirement corpus at different stages and evaluate early retirement options.</p>
-
-    <table id="portfolioGrowthTable">
-        <thead>
-            <tr>
-                <th>Age</th>
-                <th>Equity</th>
-                <th>Fixed Income</th>
-                <th>Gold</th>
-                <th>Total Portfolio</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 
 
+<!-- Portfolio Growth Over Time -->
+<h2>Portfolio Growth Over Time</h2>
+<p style="color: blue; font-weight: bold;">View your retirement corpus at different stages and evaluate early retirement options.</p>
+
+<table id="portfolioGrowthTable">
+    <thead>
+        <tr>
+            <th>Age</th>
+            <th>Equity</th>
+            <th>Fixed Income</th>
+            <th>Gold</th>
+            <th>Total Portfolio</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
 
  <!-- Retirement Expense Analysis -->
@@ -589,6 +566,8 @@ th, td {
         </thead>
         <tbody></tbody>
     </table>
+
+
     <!-- Retirement Readiness -->
     <h2>Retirement Readiness</h2>
   <p style="color: blue; font-weight: bold;">Minimum 35 times annual expense for a comfortable retirement; 4% withdrawal rule ensures longevity of your corpus.</p>
@@ -651,57 +630,81 @@ th, td {
     </tbody>
 </table>
 
-  <h2>Retirement Age Sensitivity Analysis</h2>
-  <p style="color: blue; font-weight: bold;">Evaluate the monthly and annual savings required to retire at different ages with 35X of your annual expenses at the time of retirement, Expected average portfolio return (% p.a.) is assumed</p>
+<h2>Retirement Age Sensitivity Analysis</h2>
+<p style="color: blue; font-weight: bold;">Evaluate the monthly and annual savings required to retire at different ages with 35X of your annual expenses at the time of retirement, Expected average portfolio return (% p.a.) is assumed</p>
 
 <table id="sensitivityAnalysisTable">
+<thead>
+    <tr>
+        <th>Retirement Age</th>
+        <th>Required Monthly Savings</th>
+        <th>Required Annual Savings</th>
+        <th>Corpus at Retirement</th>
+    </tr>
+</thead>
+<tbody></tbody>
+</table>
+
+
+<!-- Inflation-Adjusted Corpus Table -->
+<h2>Inflation-Adjusted Corpus</h2>
+<p style="color: blue; font-weight: bold;">Compare your corpus with and without inflation adjustments to see future value.</p>
+
+<table id="inflationAdjustedCorpusTable">
     <thead>
         <tr>
-            <th>Retirement Age</th>
-            <th>Required Monthly Savings</th>
-            <th>Required Annual Savings</th>
-            <th>Corpus at Retirement</th>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Corpus Without Inflation</th>
+            <th>Corpus With Inflation (Adjusted)</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
 
 
-    <!-- Inflation-Adjusted Corpus Table -->
-    <h2>Inflation-Adjusted Corpus</h2>
-  <p style="color: blue; font-weight: bold;">Compare your corpus with and without inflation adjustments to see future value.</p>
+<!-- Targeted Corpus Table -->
+<h2>Targeted Corpus</h2>
+<p style="color: blue; font-weight: bold;">View the monthly and annual savings required to reach your targeted corpus. (Your current balance and expected average portfolio return (% p.a.) are considered)</p>
 
-    <table id="inflationAdjustedCorpusTable">
-        <thead>
-            <tr>
-                <th>Year</th>
-                <th>Age</th>
-                <th>Corpus Without Inflation</th>
-                <th>Corpus With Inflation (Adjusted)</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<table id="targetedCorpusTable">
+    <thead>
+        <tr>
+            <th>Targeted Corpus</th>
+            <th>Amount (Rs)</th>
+            <th>Required Monthly Saving to Achieve this Target</th>
+            <th>Required Annual Saving to Achieve this Target</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-    <!-- Targeted Corpus Table -->
-    <h2>Targeted Corpus</h2>
-  <p style="color: blue; font-weight: bold;">View the monthly and annual savings required to reach your targeted corpus. (Your current balance and expected average portfolio return (% p.a.) are considered)</p>
+<h2>Scatter Area Plot for Different Market Return Scenarios</h2>
+<p style="color: blue; font-weight: bold;">Visualize how different return scenarios affect your retirement corpus.</p>
+<div style="width: 80%; height: 600px; margin: auto; background-color: rgba(173, 216, 230, 0.3); padding: 10px; border-radius: 10px;">
+    <canvas id="marketReturnScatterChart"></canvas>
+</div>
 
-    <table id="targetedCorpusTable">
-        <thead>
-            <tr>
-                <th>Targeted Corpus</th>
-                <th>Amount (Rs)</th>
-                <th>Required Monthly Saving to Achieve this Target</th>
-                <th>Required Annual Saving to Achieve this Target</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
+<h2>Post-Retirement Corpus and Withdrawal Analysis</h2>
+<table id="postRetirementTable">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Corpus</th>
+            <th>Expected Expense PA</th>
+            <th>4% Withdrawal</th>
+            <th>Corpus After Withdrawal</th>
+            <th>Corpus + Interest at Expected Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rows will be dynamically generated here -->
+    </tbody>
+</table>
 
 <script>
-// ====================== Global Variables ======================
+// ====================== scripts starts here======================
 let myChart; // Chart instance
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("generateButton").addEventListener("click", generateAssetClasses);
@@ -714,8 +717,6 @@ document.addEventListener("DOMContentLoaded", function () {
     calculatePostRetirementPlan();
     calculateRetirement();
     
-    
-
     
     
 });
@@ -821,7 +822,7 @@ function generateAssetClasses() {
             annualReturn: 11,
             depositFrequency: 12,
             depositTerm: 15,
-            annualIncrease: 5 // Default value for annual increase
+            // annualIncrease: 5 Default value for annual increase
 
         },
         {
@@ -831,7 +832,7 @@ function generateAssetClasses() {
             annualReturn: 8,
             depositFrequency: 4,
             depositTerm: 15,
-            annualIncrease: 5 // Default value for annual increase
+            // annualIncrease: 5  Default value for annual increase
 
         },
         {
@@ -841,7 +842,7 @@ function generateAssetClasses() {
             annualReturn: 6,
             depositFrequency: 2,
             depositTerm: 15,
-            annualIncrease: 5 // Default value for annual increase
+            // annualIncrease: 5 Default value for annual increase
 
         }
     ];
@@ -855,7 +856,7 @@ function generateAssetClasses() {
             annualReturn: 8,
             depositFrequency: 12,
             depositTerm: 30,
-            annualIncrease: 5 // Default value for annual increase
+            // annualIncrease: 5  Default value for annual increase
 
         };
 
@@ -866,7 +867,6 @@ function generateAssetClasses() {
             <td><input type="number" id="assetClass${i + 1}Return" value="${assetClass.annualReturn}"></td>
             <td><input type="number" id="assetClass${i + 1}Frequency" value="${assetClass.depositFrequency}"></td>
             <td><input type="number" id="assetClass${i + 1}DepositTerm" value="${assetClass.depositTerm}"></td>
-            <td><input type="number" id="assetClass${i + 1}AnnualIncrease" value="${assetClass.annualIncrease}"></td>
 
         `;
     }
@@ -1213,10 +1213,10 @@ function calculatePostRetirementPlan() {
     // Initialize Variables
     let corpus = totalCorpusAtRetirement;
     let results = [];
-    let d =60;
+    
     // Calculate Post-Retirement Plan
     for (let age = retirementAge; age <= lifeExpectancy; age++) {
-        // const yearsSinceRetirement = currentAge  + age;
+        const yearsSinceRetirement = age - currentAge;
         // console.log("retireAge:",age);
         // console.log("Current AGe:",currentAge);
         // console.log("Age Inflation:",age-currentAge);
@@ -1242,11 +1242,10 @@ function calculatePostRetirementPlan() {
 
         // Calculate Corpus + Interest at Expected Rate
         const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
-        d +=1
 
         // Store Results
         results.push({
-            year: new Date().getFullYear() + age,
+            year: new Date().getFullYear() + yearsSinceRetirement,
             age: age,
             corpus: corpus.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
             expectedExpensePA: expectedExpensePA.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
@@ -1555,13 +1554,6 @@ function calculateTargetedCorpus() {
     </script>
 
 
-
-<h2>Scatter Area Plot for Different Market Return Scenarios</h2>
-<p style="color: blue; font-weight: bold;">Visualize how different return scenarios affect your retirement corpus.</p>
-<div style="width: 80%; height: 600px; margin: auto; background-color: rgba(173, 216, 230, 0.3); padding: 10px; border-radius: 10px;">
-    <canvas id="marketReturnScatterChart"></canvas>
-</div>
-
 <script>
     function calculateMarketReturnScenarios1() {
         const assetClassCount = parseInt(document.getElementById("assetClassCount").value);
@@ -1680,6 +1672,10 @@ function calculateTargetedCorpus() {
 });
 
 </script>
+
+
+
+
 
 
 
