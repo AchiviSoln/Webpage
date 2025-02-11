@@ -1135,7 +1135,7 @@ for (let i = 1; i <= assetClassCount; i++) {
     // Sum up the values for the totals
     totalInvestedAmount += totalInvested;
     totalInterestEarned += totalInterest;
-
+    console.log(formatCurrency(Math.round(totalInvested))); 
     // Add row to the Retirement Summary table
     let summaryRow = summaryTable.insertRow();
     summaryRow.insertCell(0).innerText = assetName;
@@ -1463,7 +1463,8 @@ function displayPostRetirementResults2(results) {
 
 // Format Currency
 function formatCurrency(value) {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(value);
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' , minimumFractionDigits: 0, // Ensure no decimal places
+    maximumFractionDigits: 0 }).format(value);
 }
 
 
@@ -1758,9 +1759,9 @@ function calculateTargetedCorpus() {
             return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
 
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
-        }
+        // function formatCurrency(value) {
+        //     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
+        // }
     </script>
 
 
