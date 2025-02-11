@@ -1441,51 +1441,60 @@ function renderAssetAllocationCharts(assetAllocationData) {
     // console.log("Retirement Data:", retirementData);
 
     function createChart(chartId, labels, data, legendId) {
-        const canvas = document.getElementById(chartId);
-        const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById(chartId);
+    const ctx = canvas.getContext('2d');
 
-        // **Check if chart instance exists before destroying**
-        if (window[chartId] instanceof Chart) {
-            window[chartId].destroy();
-        }
-
-        // **Recreate Chart Instance**
-        window[chartId] = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    datalabels: {
-                        color: 'black',
-                        font: { weight: 'bold', size: 14 },
-                        formatter: (value) => `${value}%`,
-                        anchor: 'center',
-                        align: 'end',
-                        offset: 10,
-                        rotation: 75
-                    }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
-
-        // **Update Legend**
-        document.getElementById(legendId).innerHTML = labels.map((label, index) => `
-            <span style="display: inline-block; margin: 5px; padding: 5px; border-radius: 5px; background-color: ${colors[index]}; color: white;">
-                ${label}
-            </span>
-        `).join(" ");
+    if (window[chartId] instanceof Chart) {
+        window[chartId].destroy();
     }
+
+    const isMobile = window.innerWidth < 768;
+    const labelOffset = isMobile ? 5 : 10;
+    const labelFontSize = isMobile ? 10 : 14;
+
+    window[chartId] = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    color: 'black',
+                    font: { weight: 'bold', size: labelFontSize },
+                    formatter: (value) => `${value}%`,
+                    anchor: 'center',
+                    align: 'center',
+                    offset: labelOffset,
+                    clamp: true,
+                    rotation: 45
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    document.getElementById(legendId).innerHTML = labels.map((label, index) => `
+        <span style="display: inline-block; margin: 5px; padding: 5px; border-radius: 5px; background-color: ${colors[index]}; color: white;">
+            ${label}
+        </span>
+    `).join(" ");
+}
+
+// **Resize Event Listener to Recreate Chart**
+window.addEventListener('resize', () => {
+    createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
+    createChart('retirementAssetAllocationChart', labels, retirementData, 'retirementAssetAllocationLegend');
+});
+
 
     // **Call createChart separately for both charts**
     createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
