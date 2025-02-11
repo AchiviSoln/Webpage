@@ -325,49 +325,210 @@
         }
       
     </style>
+    <style>
+        #retirement-inputs {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Add some spacing below the table */
+        }
+    
+        #retirement-inputs th, #retirement-inputs td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left; /* Align text to the left */
+        }
+    
+        #retirement-inputs th {
+            background-color: #f2f2f2; /* Light gray background for header */
+            font-weight: bold;
+        }
+    
+        #retirement-inputs .label {
+            font-weight: bold;  /* Make labels bold */
+            white-space: nowrap; /* Prevent labels from wrapping */
+        }
+    
+        /* Basic mobile responsiveness */
+        @media screen and (max-width: 600px) {
+          #retirement-inputs {
+            font-size: 14px; /* Slightly smaller font on mobile */
+          }
+          #retirement-inputs th, #retirement-inputs td {
+            display: block; /* Stack table cells vertically */
+            width: 100%; /* Make cells take full width */
+            padding: 5px; /* Reduce padding on mobile */
+          }
+          #retirement-inputs th {
+              text-align: left; /* Align header text to the left */
+          }
+            #retirement-inputs tr {
+                border-bottom: 1px solid #ddd; /* Add separator between rows */
+            }
+            #retirement-inputs thead {
+                display: none; /* Hide the table header */
+            }
+    
+        }
+    </style>
+<style>
+    /* Basic Styling */
+    body {
+        font-family: sans-serif;
+        margin: 20px;
+    }
+
+    h1, h2 {
+        text-align: center; /* Center headings */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        table-layout: fixed; /* Important for equal column widths */
+    }
+
+    th, td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+        word-wrap: break-word; /* Prevent content from overflowing cells */
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .label {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .button-container {
+        text-align: center; /* Center buttons */
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #0073e6;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .retirement-info-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .retirement-section {
+        width: 45%; /* Adjust width for desired layout */
+        margin-bottom: 20px; /* Add margin between sections */
+        border: 1px solid #ddd; /* Optional: Add borders for visual separation */
+        padding: 10px;
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    .progress-container {
+        width: 100%;
+        height: 20px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        overflow: hidden; /* Hide overflowing progress */
+    }
+
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background-color: #4CAF50; /* Green progress bar */
+        color: white;
+        text-align: center;
+        line-height: 20px; /* Vertically center text */
+        border-radius: 5px;
+        transition: width 0.5s ease-in-out; /* Smooth progress animation */
+    }
+    .chart-container {
+        width: 90%; /* Adjust as needed */
+        margin: 20px auto; /* Center the container */
+        height: 400px; /* Set a height for the chart */
+    }
+    /* Mobile Responsiveness */
+    @media screen and (max-width: 768px) {
+        .retirement-section {
+            width: 90%; /* Make sections full width on mobile */
+            margin: 10px auto; /* Center the sections */
+        }
+        #retirement-inputs th, #retirement-inputs td, #assetClassTable th, #assetClassTable td, #checkBeforeInvestingTable th, #checkBeforeInvestingTable td, #summaryTable th, #summaryTable td, #portfolioGrowthTable th, #portfolioGrowthTable td, #expenseTable th, #expenseTable td, #retirementReadinessTable th, #retirementReadinessTable td, #marketReturnScenariosTable th, #marketReturnScenariosTable td, #sensitivityAnalysisTable th, #sensitivityAnalysisTable td, #inflationAdjustedCorpusTable th, #inflationAdjustedCorpusTable td, #targetedCorpusTable th, #targetedCorpusTable td, #postRetirementTable th, #postRetirementTable td, #postRetirementTable2 th, #postRetirementTable2 td {
+            display: block;
+            width: 100%;
+            text-align: left; /* Align text to the left */
+        }
+        #retirement-inputs thead, #assetClassTable thead, #checkBeforeInvestingTable thead, #summaryTable thead, #portfolioGrowthTable thead, #expenseTable thead, #retirementReadinessTable thead, #marketReturnScenariosTable thead, #sensitivityAnalysisTable thead, #inflationAdjustedCorpusTable thead, #targetedCorpusTable thead, #postRetirementTable thead, #postRetirementTable2 thead {
+            display: none; /* Hide header on small screens */
+        }
+        #retirement-inputs tr, #assetClassTable tr, #checkBeforeInvestingTable tr, #summaryTable tr, #portfolioGrowthTable tr, #expenseTable tr, #retirementReadinessTable tr, #marketReturnScenariosTable tr, #sensitivityAnalysisTable tr, #inflationAdjustedCorpusTable tr, #targetedCorpusTable tr, #postRetirementTable tr, #postRetirementTable2 tr {
+            border-bottom: 1px solid #ddd;
+        }
+        /* Adjust chart sizes for smaller screens */
+        .chart-container {
+            height: 300px;
+        }
+    }
+</style>
+
 </head>
 <body>
-    <h1>Retirement Readiness Calculator</h1>
+<h1>Retirement Readiness Calculator</h1>
 
-    <h2>User Input Section</h2>
-    <p style="color: #0073e6; font-weight: bold; display: flex; align-items: center;">
-        <span style="margin-right: 5px;"></span>  Check and update the pre-filled data as per your current data.
-    </p>
+<h2>User Input Section</h2>
+<p style="color: #0073e6; font-weight: bold;">
+    Check and update the pre-filled data as per your current data.
+</p>
 
-    <!-- Input Fields in Table Format -->
-    <table>
-            <tr>
-                <th>Your Current Age:</th>
-                <td><input type="number" id="currentAge" value="40" min="0" placeholder="e.g., 40"></td>
-                <th>Planned Retirement Age:</th>
-                <td><input type="number" id="retirementAge" value="60" min="0" placeholder="e.g., 60"></td>
-                <th>Life Expectancy:</th>
-                <td><input type="number" id="lifeExpectancy" value="80" min="0" placeholder="e.g., 80"></td>
-            </tr>
-            <tr>
-                <th>Retirement Goal Amount:</th>
-                <td><input type="number" id="retirementGoal" value="30000000" min="0" placeholder="e.g., 3,00,00,000"></td>
-                <th>Expected Annual Inflation Rate (%):</th>
-                <td><input type="number" id="expectedInflation" value="6" min="0" placeholder="e.g., 6"></td>
-                <th>Expected Average Portfolio Return % PA:</th>
-                <td><input type="number" id="expectedReturn" value="7" min="0" placeholder="e.g., 7"></td>
-            </tr>
-            <tr>
-                <th>Current Monthly Expenditure:</th>
-                <td><input type="number" id="currentExpenditure" value="60000" min="0" placeholder="e.g., 60,000"></td>
-                <th>Current Emergency Fund:</th>
-                <td><input type="number" id="emergencyFund" value="300000" min="0" placeholder="e.g., 3,00,000"></td>
-                <th>Current Term Plan Assurance:</th>
-                <td><input type="number" id="termPlanAssurance" value="10000000" min="0" placeholder="e.g., 1,00,00,000"></td>
-            </tr>
-            <tr>
-                <th>Number of Asset Classes:</th>
-                <td colspan="5"><input type="number" id="assetClassCount" value="3" min="1" max="5" placeholder="e.g., 3"></td>
-            </tr>
-    </table>
-
- 
- 
+<table id="retirement-inputs">
+    <thead>
+        <tr>
+            <th colspan="2">Personal Information</th>
+            <th colspan="2">Financial Goals</th>
+            <th colspan="2">Current Financial Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label">Current Age:</td>
+            <td><input type="number" id="currentAge" value="40" min="0" placeholder="e.g., 40"></td>
+            <td class="label">Retirement Goal:</td>
+            <td><input type="number" id="retirementGoal" value="30000000" min="0" placeholder="e.g., 3,00,00,000"></td>
+            <td class="label">Current Monthly Expenditure:</td>
+            <td><input type="number" id="currentExpenditure" value="60000" min="0" placeholder="e.g., 60,000"></td>
+        </tr>
+        <tr>
+            <td class="label">Planned Retirement Age:</td>
+            <td><input type="number" id="retirementAge" value="60" min="0" placeholder="e.g., 60"></td>
+            <td class="label">Expected Annual Inflation (%):</td>
+            <td><input type="number" id="expectedInflation" value="6" min="0" placeholder="e.g., 6"></td>
+            <td class="label">Current Emergency Fund:</td>
+            <td><input type="number" id="emergencyFund" value="300000" min="0" placeholder="e.g., 3,00,000"></td>
+        </tr>
+        <tr>
+            <td class="label">Life Expectancy:</td>
+            <td><input type="number" id="lifeExpectancy" value="80" min="0" placeholder="e.g., 80"></td>
+            <td class="label">Expected Avg. Portfolio Return (%):</td>
+            <td><input type="number" id="expectedReturn" value="7" min="0" placeholder="e.g., 7"></td>
+            <td class="label">Current Term Plan Assurance:</td>
+            <td><input type="number" id="termPlanAssurance" value="10000000" min="0" placeholder="e.g., 1,00,00,000"></td>
+        </tr>
+        <tr>
+            <td class="label" colspan="2">Number of Asset Classes:</td>
+            <td colspan="4"><input type="number" id="assetClassCount" value="3" min="1" max="5" placeholder="e.g., 3"></td>
+        </tr>
+    </tbody>
+</table>
 
     <!-- Asset Class Input Table -->
   
@@ -1358,10 +1519,8 @@ function displayPostRetirementResults2(results) {
 
 // Format Currency
 function formatCurrency(value) {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(value);
 }
-
-
 
 
 
@@ -1491,6 +1650,8 @@ function renderAssetAllocationCharts(assetAllocationData) {
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(renderAssetAllocationCharts, 2000);
 });
+
+
 
 
 function renderChart(labels, datasets) {
