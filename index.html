@@ -323,162 +323,8 @@
                 padding: 6px;
             }
         }
-      
-    </style>
-    <style>
-        #retirement-inputs {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px; /* Add some spacing below the table */
-        }
-    
-        #retirement-inputs th, #retirement-inputs td {
-            padding: 8px;
-            border: 1px solid #ddd;
-            text-align: left; /* Align text to the left */
-        }
-    
-        #retirement-inputs th {
-            background-color: #f2f2f2; /* Light gray background for header */
-            font-weight: bold;
-        }
-    
-        #retirement-inputs .label {
-            font-weight: bold;  /* Make labels bold */
-            white-space: nowrap; /* Prevent labels from wrapping */
-        }
-    
-        /* Basic mobile responsiveness */
-        @media screen and (max-width: 600px) {
-          #retirement-inputs {
-            font-size: 14px; /* Slightly smaller font on mobile */
-          }
-          #retirement-inputs th, #retirement-inputs td {
-            display: block; /* Stack table cells vertically */
-            width: 100%; /* Make cells take full width */
-            padding: 5px; /* Reduce padding on mobile */
-          }
-          #retirement-inputs th {
-              text-align: left; /* Align header text to the left */
-          }
-            #retirement-inputs tr {
-                border-bottom: 1px solid #ddd; /* Add separator between rows */
-            }
-            #retirement-inputs thead {
-                display: none; /* Hide the table header */
-            }
-    
-        }
-    </style>
-<style>
-    /* Basic Styling */
-    body {
-        font-family: sans-serif;
-        margin: 20px;
-    }
 
-    h1, h2 {
-        text-align: center; /* Center headings */
-    }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        table-layout: fixed; /* Important for equal column widths */
-    }
-
-    th, td {
-        padding: 8px;
-        border: 1px solid #ddd;
-        text-align: left;
-        word-wrap: break-word; /* Prevent content from overflowing cells */
-    }
-
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    .label {
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .button-container {
-        text-align: center; /* Center buttons */
-        margin-bottom: 20px;
-    }
-
-    button {
-        padding: 10px 20px;
-        background-color: #0073e6;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    .retirement-info-container {
-        display: flex;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        justify-content: space-around;
-        margin-bottom: 20px;
-    }
-
-    .retirement-section {
-        width: 45%; /* Adjust width for desired layout */
-        margin-bottom: 20px; /* Add margin between sections */
-        border: 1px solid #ddd; /* Optional: Add borders for visual separation */
-        padding: 10px;
-        box-sizing: border-box; /* Include padding in width calculation */
-    }
-
-    .progress-container {
-        width: 100%;
-        height: 20px;
-        background-color: #f0f0f0;
-        border-radius: 5px;
-        overflow: hidden; /* Hide overflowing progress */
-    }
-
-    #progressBar {
-        height: 100%;
-        width: 0%;
-        background-color: #4CAF50; /* Green progress bar */
-        color: white;
-        text-align: center;
-        line-height: 20px; /* Vertically center text */
-        border-radius: 5px;
-        transition: width 0.5s ease-in-out; /* Smooth progress animation */
-    }
-    .chart-container {
-        width: 90%; /* Adjust as needed */
-        margin: 20px auto; /* Center the container */
-        height: 400px; /* Set a height for the chart */
-    }
-    /* Mobile Responsiveness */
-    @media screen and (max-width: 768px) {
-        .retirement-section {
-            width: 90%; /* Make sections full width on mobile */
-            margin: 10px auto; /* Center the sections */
-        }
-        #retirement-inputs th, #retirement-inputs td, #assetClassTable th, #assetClassTable td, #checkBeforeInvestingTable th, #checkBeforeInvestingTable td, #summaryTable th, #summaryTable td, #portfolioGrowthTable th, #portfolioGrowthTable td, #expenseTable th, #expenseTable td, #retirementReadinessTable th, #retirementReadinessTable td, #marketReturnScenariosTable th, #marketReturnScenariosTable td, #sensitivityAnalysisTable th, #sensitivityAnalysisTable td, #inflationAdjustedCorpusTable th, #inflationAdjustedCorpusTable td, #targetedCorpusTable th, #targetedCorpusTable td, #postRetirementTable th, #postRetirementTable td, #postRetirementTable2 th, #postRetirementTable2 td {
-            display: block;
-            width: 100%;
-            text-align: left; /* Align text to the left */
-        }
-        #retirement-inputs thead, #assetClassTable thead, #checkBeforeInvestingTable thead, #summaryTable thead, #portfolioGrowthTable thead, #expenseTable thead, #retirementReadinessTable thead, #marketReturnScenariosTable thead, #sensitivityAnalysisTable thead, #inflationAdjustedCorpusTable thead, #targetedCorpusTable thead, #postRetirementTable thead, #postRetirementTable2 thead {
-            display: none; /* Hide header on small screens */
-        }
-        #retirement-inputs tr, #assetClassTable tr, #checkBeforeInvestingTable tr, #summaryTable tr, #portfolioGrowthTable tr, #expenseTable tr, #retirementReadinessTable tr, #marketReturnScenariosTable tr, #sensitivityAnalysisTable tr, #inflationAdjustedCorpusTable tr, #targetedCorpusTable tr, #postRetirementTable tr, #postRetirementTable2 tr {
-            border-bottom: 1px solid #ddd;
-        }
-        /* Adjust chart sizes for smaller screens */
-        .chart-container {
-            height: 300px;
-        }
-    }
 </style>
 
 </head>
@@ -1660,68 +1506,93 @@ function renderChart(labels, datasets) {
             window.myChart.destroy();
         }
         window.myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets.map((dataset, index) => ({
-                ...dataset,
-                borderColor: [
-                        "#1F77B4", // Blue
-                        "#FF7F0E", // Orange
-                        "#2CA02C", // Green
-                        "#D62728", // Red
-                        "#9467BD"  // Purple
-                    ][index % 5],// Apply a different color to each dataset
-                    backgroundColor: "transparent",
-                    pointBackgroundColor: "#ffffff",
-                    pointBorderColor: "#000000",
-                    pointRadius: 3, // Slightly larger points for better visibility
-                    borderWidth: 3, // Thicker lines for better contrast
-                    fill: true
-            }))
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: datasets.map((dataset, index) => ({
+            ...dataset,
+            borderColor: [
+                "#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD"
+            ][index % 5],
+            backgroundColor: "transparent",
+            pointBackgroundColor: "#ffffff",
+            pointBorderColor: "#000000",
+            pointRadius: 3,
+            borderWidth: 3,
+            fill: true
+        }))
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // Allow aspect ratio changes on mobile
+        plugins: {
+            legend: {
+                display: false // Hide default legend
+            }
         },
-
-
-        options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-        legend: {
-            display: false // Hide default legend (we add a custom one)
+        layout: {
+            padding: { top: 20, left: 20, right: 20, bottom: 20 } // Add padding
+        },
+        scales: {
+            x: {
+                type: "linear",
+                position: "bottom",
+                title: { display: true, text: "Age" },
+                ticks: {
+                    autoSkip: true, // Auto-skip ticks for better mobile view
+                    maxTicksLimit: 7  // Limit the number of x-axis ticks
+                }
+            },
+            y: {
+                title: { display: true, text: "Portfolio Value (INR)" },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 7
+                }
+            }
+        },
+        // Chart resizing animation for smoother transitions
+        animation: {
+            duration: 500,
+            easing: 'easeInOutQuad'
         }
     },
-    layout: {
-        padding: { top: 20, left: 20 }
-    },
-    scales: {
-        x: {
-            type: "linear",
-            position: "bottom",
-            title: { display: true, text: "Age" }
-        },
-        y: {
-            title: { display: true, text: "Portfolio Value (INR)" }
-        }
-    }
-},
-plugins: [
+    plugins: [
     {
         id: "customLegend",
         afterDraw(chart) {
-            const { ctx, chartArea: { left, top } } = chart;
+            const { ctx, chartArea: { left, top, right, bottom } } = chart;
             ctx.save();
-            
+
+
+
+            const legendWidth = 160;
+            const legendX = left + 20;
+            let legendY = top + 10;
+            const legendHeight = datasets.length * 20 + 10;
+
+            // Check if legend fits on the right, otherwise position at the top
+            if (right - legendX >= legendWidth) {
+                // Position on the right
+                legendY = top + 10;
+            } else {
+                // Position at the top, centered
+                legendX = (chart.width - legendWidth) / 2; // Center horizontally
+                legendY = top - legendHeight - 10; // Position above the chart
+                if (legendY < 0) { legendY = top + bottom + 10} // if not space above then below
+            }
+
             // Background box for legend
             ctx.fillStyle = "rgba(255, 255, 153, 0.3)";
-            ctx.fillRect(left + 20, top + 10, 160, datasets.length * 20 + 10);
+            // ctx.fillRect(legendX, legendY, 110, datasets.length*10);
 
             // Draw legend items
             datasets.forEach((dataset, index) => {
                 const color = dataset.borderColor;
                 ctx.fillStyle = color;
-                ctx.fillRect(left + 25, top + 20 + index * 20, 10, 10); // Color box
+                ctx.fillRect(legendX + 5, legendY + 5 + index * 20, 10, 10);
                 ctx.fillStyle = "black";
-                ctx.fillText(dataset.label, left + 40, top + 30 + index * 20); // Text label
+                ctx.fillText(dataset.label, legendX + 20, legendY + 15 + index * 20);
             });
 
             ctx.restore();
