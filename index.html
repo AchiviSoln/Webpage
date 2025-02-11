@@ -284,43 +284,8 @@
             padding: 4px;
             font-size: 13px;
         }
-      
-   table {
-    width: auto; /* Adjusts to content */
-    border-collapse: collapse; /* Removes extra spacing between cells */
-    margin: 20px auto; /* Centers the table */
-    font-size: 16px; /* Compact font size */
-    table-layout: auto; /* Adjust column widths dynamically */
-    border: 1px solid #ccc; /* Soft border for entire table */
-}
-th, td {
-    max-width: 150px; /* Prevents columns from getting too wide */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds '...' for overflowed text */
-}
- /* Table headers */
-        th {
-            background-color: #0073e6;
-            color: white;
-            padding: 10px;
-        }
-
-        /* Table rows */
-        td, th {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-
-        /* Alternating row colors */
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* Hover effect */
-        tr:hover {
-            background-color: #ffeb99;
-        }
-
+/* /*        */
+        
         /* Adding a border and shadow to the table */
         .table-container {
             border: 2px solid #0073e6;
@@ -703,6 +668,24 @@ th, td {
     </tbody>
 </table>
 
+
+<h2>How long Your corpus can sustain </h2>
+<table id="postRetirementTable2">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Corpus</th>
+            <th>Expected Expense PA</th>
+            <th>Corpus after Expense </th>
+            <th>Corpus + Interest at Expected Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rows will be dynamically generated here -->
+    </tbody>
+</table>
+
 <script>
 // ====================== scripts starts here======================
 let myChart; // Chart instance
@@ -762,9 +745,9 @@ retirementAges.forEach(retirementAge => {
     // Add row to the table
     const row = tableBody.insertRow();
     row.insertCell(0).innerText = retirementAge;
-    row.insertCell(1).innerText = formatCurrency(requiredMonthlySaving);
-    row.insertCell(2).innerText = formatCurrency(requiredAnnualSaving);
-    row.insertCell(3).innerText = formatCurrency(targetedCorpus);
+    row.insertCell(1).innerText = formatCurrency(Math.round(requiredMonthlySaving));
+    row.insertCell(2).innerText = formatCurrency(Math.round(requiredAnnualSaving));
+    row.insertCell(3).innerText = formatCurrency(Math.round(targetedCorpus));
 });
 }
 
@@ -911,25 +894,25 @@ function calculateMarketReturnScenarios() {
 
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = assetName;
-        row.insertCell(1).innerText = formatCurrency(corpusAtMinus3);
-        row.insertCell(2).innerText = formatCurrency(corpusAtMinus2);
-        row.insertCell(3).innerText = formatCurrency(corpusAtMinus1);
-        row.insertCell(4).innerText = formatCurrency(corpusAtExpectedReturn);
-        row.insertCell(5).innerText = formatCurrency(corpusAtPlus1);
-        row.insertCell(6).innerText = formatCurrency(corpusAtPlus2);
-        row.insertCell(7).innerText = formatCurrency(corpusAtPlus3);
+        row.insertCell(1).innerText = formatCurrency(Math.round(corpusAtMinus3));
+        row.insertCell(2).innerText = formatCurrency(Math.round(corpusAtMinus2));
+        row.insertCell(3).innerText = formatCurrency(Math.round(corpusAtMinus1));
+        row.insertCell(4).innerText = formatCurrency(Math.round(corpusAtExpectedReturn));
+        row.insertCell(5).innerText = formatCurrency(Math.round( corpusAtPlus1));
+        row.insertCell(6).innerText = formatCurrency(Math.round( corpusAtPlus2));
+        row.insertCell(7).innerText = formatCurrency(Math.round( corpusAtPlus3));
     }
 
     // Add Total row
     const totalRow = tableBody.insertRow();
     totalRow.insertCell(0).innerText = "Total";
-    totalRow.insertCell(1).innerText = formatCurrency(totalCorpusAtMinus3);
-    totalRow.insertCell(2).innerText = formatCurrency(totalCorpusAtMinus2);
-    totalRow.insertCell(3).innerText = formatCurrency(totalCorpusAtMinus1);
-    totalRow.insertCell(4).innerText = formatCurrency(totalCorpusAtExpectedReturn);
-    totalRow.insertCell(5).innerText = formatCurrency(totalCorpusAtPlus1);
-    totalRow.insertCell(6).innerText = formatCurrency(totalCorpusAtPlus2);
-    totalRow.insertCell(7).innerText = formatCurrency(totalCorpusAtPlus3);
+    totalRow.insertCell(1).innerText = formatCurrency(Math.round(totalCorpusAtMinus3));
+    totalRow.insertCell(2).innerText = formatCurrency(Math.round(totalCorpusAtMinus2));
+    totalRow.insertCell(3).innerText = formatCurrency(Math.round(totalCorpusAtMinus1));
+    totalRow.insertCell(4).innerText = formatCurrency(Math.round(totalCorpusAtExpectedReturn));
+    totalRow.insertCell(5).innerText = formatCurrency(Math.round(totalCorpusAtPlus1));
+    totalRow.insertCell(6).innerText = formatCurrency(Math.round(totalCorpusAtPlus2));
+    totalRow.insertCell(7).innerText = formatCurrency(Math.round(totalCorpusAtPlus3));
 }
 
 function calculateCorpus(initialBalance, deposit, annualReturn, depositFrequency, depositTerm, yearsToRetirement) {
@@ -1052,10 +1035,10 @@ for (let i = 1; i <= assetClassCount; i++) {
     let summaryRow = summaryTable.insertRow();
     summaryRow.insertCell(0).innerText = assetName;
     summaryRow.insertCell(1).innerText = retirementAge;
-    summaryRow.insertCell(2).innerText = formatCurrency(initialBalance);
-    summaryRow.insertCell(3).innerText = formatCurrency(totalInvested);
-    summaryRow.insertCell(4).innerText = formatCurrency(totalInterest);
-    summaryRow.insertCell(5).innerText = formatCurrency(balance);
+    summaryRow.insertCell(2).innerText = formatCurrency(Math.round(initialBalance));
+    summaryRow.insertCell(3).innerText = formatCurrency(Math.round(totalInvested));
+    summaryRow.insertCell(4).innerText = formatCurrency(Math.round(totalInterest));
+    summaryRow.insertCell(5).innerText = formatCurrency(Math.round(balance));
 
     // Add dataset for chart
     datasets.push({ label: assetName, data: dataPoints, borderColor: getRandomColor(), fill: false });
@@ -1068,10 +1051,10 @@ datasets.push({ label: "Total Portfolio", data: totalPortfolioData, borderColor:
 let totalRow = summaryTable.insertRow();
 totalRow.insertCell(0).innerText = "Total Portfolio";
 totalRow.insertCell(1).innerText = retirementAge;
-totalRow.insertCell(2).innerText = formatCurrency(totalInitialBalance); // Total Initial Balance
-totalRow.insertCell(3).innerText = formatCurrency(totalInvestedAmount); // Total Invested Amount
-totalRow.insertCell(4).innerText = formatCurrency(totalInterestEarned); // Total Interest Earned
-totalRow.insertCell(5).innerText = formatCurrency(totalPortfolioData[yearsToRetirement - 1]); // Total Portfolio Value
+totalRow.insertCell(2).innerText = formatCurrency(Math.round(totalInitialBalance)); // Total Initial Balance
+totalRow.insertCell(3).innerText = formatCurrency(Math.round(totalInvestedAmount)); // Total Invested Amount
+totalRow.insertCell(4).innerText = formatCurrency(Math.round(totalInterestEarned)); // Total Interest Earned
+totalRow.insertCell(5).innerText = formatCurrency(Math.round(totalPortfolioData[yearsToRetirement - 1])); // Total Portfolio Value
 
 
 
@@ -1137,21 +1120,21 @@ let isPortfolioSufficient = interestAmountPerMonth >= expectedExpensePerMonth;
 // Add data to the expense table
 let expenseRow = expenseTable.insertRow();
 expenseRow.insertCell(0).innerText = retirementAge;
-expenseRow.insertCell(1).innerText = formatCurrency(expectedExpensePerMonth);
-expenseRow.insertCell(2).innerText = formatCurrency(interestAmountPerMonth);
+expenseRow.insertCell(1).innerText = formatCurrency(Math.round(expectedExpensePerMonth));
+expenseRow.insertCell(2).innerText = formatCurrency(Math.round(interestAmountPerMonth));
 expenseRow.insertCell(3).innerText = isPortfolioSufficient ? "Yes(Only first year after retirement is considered)" : "Need careful consideration";
 
 // Update Retirement Readiness Table
 document.getElementById("retirementAgeReadiness").innerText = retirementAge;
-document.getElementById("corpusAtRetirement").innerText = formatCurrency(totalBalanceAtRetirement);
+document.getElementById("corpusAtRetirement").innerText = formatCurrency(Math.round(totalBalanceAtRetirement));
 document.getElementById("corpusComment").innerText = totalBalanceAtRetirement >= retirementGoal ? "More Than Retirement Goal Amount" : "Less Than Retirement Goal Amount";
-document.getElementById("expectedAnnualExpense").innerText = formatCurrency(expectedAnnualExpense);
+document.getElementById("expectedAnnualExpense").innerText = formatCurrency(Math.round(expectedAnnualExpense));
 document.getElementById("expenseComment").innerText = isPortfolioSufficient ? "Portfolio estimated return is greater than this amount" : "Portfolio estimated return is smaller than this amount";
 let corpusTimesExpense = (totalBalanceAtRetirement / expectedAnnualExpense).toFixed(2);
 document.getElementById("corpusTimesExpense").innerText = corpusTimesExpense;
 document.getElementById("corpusTimesExpenseComment").innerText = corpusTimesExpense >= 35 && corpusTimesExpense <= 60 ? "Your Retirement Corpus is reasonably Good" : "Your Retirement Corpus may not be sufficient";
 let fourPercentPortfolio = (totalBalanceAtRetirement * 0.04).toFixed(2);
-document.getElementById("fourPercentPortfolio").innerText = formatCurrency(fourPercentPortfolio);
+document.getElementById("fourPercentPortfolio").innerText = formatCurrency(Math.round(fourPercentPortfolio));
 document.getElementById("fourPercentComment").innerText = fourPercentPortfolio >= expectedAnnualExpense ? "More than Expected Annual Expense" : "Less than Expected Annual Expense";
 
 // Populate Portfolio Growth Over Time Table
@@ -1159,17 +1142,17 @@ for (let year = 0; year < yearsToRetirement; year += 4) {
     let row = portfolioGrowthTable.insertRow();
     row.insertCell(0).innerText = currentAge + year;
     for (let i = 0; i < assetClassCount; i++) {
-        row.insertCell(i + 1).innerText = formatCurrency(datasets[i].data[year]);
+        row.insertCell(i + 1).innerText = formatCurrency(Math.round(datasets[i].data[year]));
     }
-    row.insertCell(assetClassCount + 1).innerText = formatCurrency(totalPortfolioData[year]);
+    row.insertCell(assetClassCount + 1).innerText = formatCurrency(Math.round(totalPortfolioData[year]));
 }
 
 // Update the Check Before You Start Investing table
 const emergencyFund = parseFloat(document.getElementById("emergencyFund").value) || 0;
 const termPlanAssurance = parseFloat(document.getElementById("termPlanAssurance").value) || 0;
 
-document.getElementById("emergencyFundDisplay").innerText = formatCurrency(emergencyFund);
-document.getElementById("termPlanCoverageDisplay").innerText = formatCurrency(termPlanAssurance);
+document.getElementById("emergencyFundDisplay").innerText = formatCurrency(Math.round(emergencyFund));
+document.getElementById("termPlanCoverageDisplay").innerText = formatCurrency(Math.round(termPlanAssurance));
 
 // Populate Inflation-Adjusted Corpus Table
 for (let year = 0; year <= yearsToRetirement; year += 5) {
@@ -1180,8 +1163,8 @@ for (let year = 0; year <= yearsToRetirement; year += 5) {
     let row = inflationAdjustedCorpusTable.insertRow();
     row.insertCell(0).innerText = new Date().getFullYear() + year;
     row.insertCell(1).innerText = age;
-    row.insertCell(2).innerText = formatCurrency(corpusWithoutInflation);
-    row.insertCell(3).innerText = formatCurrency(corpusWithInflation);
+    row.insertCell(2).innerText = formatCurrency(Math.round(corpusWithoutInflation));
+    row.insertCell(3).innerText = formatCurrency(Math.round(corpusWithInflation));
 }
 
 // Calculate and populate the Targeted Corpus table
@@ -1189,6 +1172,7 @@ calculateTargetedCorpus();
 renderAssetAllocationCharts(assetAllocationData);
 renderChart(labels, datasets);
 calculatePostRetirementPlan();
+calculatePostRetirementPlan2()
 
 }
 
@@ -1247,11 +1231,11 @@ function calculatePostRetirementPlan() {
         results.push({
             year: new Date().getFullYear() + yearsSinceRetirement,
             age: age,
-            corpus: corpus.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
-            expectedExpensePA: expectedExpensePA.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
-            withdrawal: withdrawal.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
-            corpusAfterWithdrawal: corpusAfterWithdrawal.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
-            corpusWithInterest: corpusWithInterest.toLocaleString("en-IN", { style: "currency", currency: "INR" }),
+            corpus: formatCurrency(Math.round(corpus)),
+            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
+            withdrawal: formatCurrency(Math.round(withdrawal)),
+            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
+            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
         });
 
         // Update Corpus for Next Year
@@ -1283,6 +1267,93 @@ function displayPostRetirementResults(results) {
     });
 }
 
+function calculatePostRetirementPlan2() {
+    // Input Values
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAge = parseInt(document.getElementById("retirementAge").value);
+    const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
+    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+    const yearsToRetirement = retirementAge - currentAge;
+    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
+    const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
+
+
+    // console.log("expectedInflation:",expectedInflation)
+    // console.log("OUtcome:",currentExpenditure * 12 * Math.pow(1 + expectedInflation))
+
+    // Initialize Variables
+    let corpus = totalCorpusAtRetirement;
+    let results = [];
+    
+    // Calculate Post-Retirement Plan
+    for (let age = retirementAge; age <= lifeExpectancy; age++) {
+        const yearsSinceRetirement = age - currentAge;
+        // console.log("retireAge:",age);
+        // console.log("Current AGe:",currentAge);
+        // console.log("Age Inflation:",age-currentAge);
+        const testedValue = age - currentAge;
+
+        // Calculate Expected Expense PA (Adjusted for Inflation)
+        // Calculate expected expense per month at retirement
+        // let yearsOfInflation = retirementAge - currentAge;
+        // let expectedExpensePerMonth = currentExpenditure * Math.pow(1 + expectedInflation, yearsOfInflation);
+        // let expectedAnnualExpense = expectedExpensePerMonth * 12;
+
+
+        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
+        // console.log("OUtcome:", currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue))
+
+        // const expectedExpensePA =expectedAnnualExpense;
+
+        // Calculate 4% Withdrawal
+
+        // Calculate Corpus After Withdrawal
+        const corpusAfterWithdrawal = corpus - expectedExpensePA;
+
+        // Calculate Corpus + Interest at Expected Rate
+        const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
+
+        // Store Results
+        results.push({
+            year: new Date().getFullYear() + yearsSinceRetirement,
+            age: age,
+            corpus: formatCurrency(Math.round(corpus)),
+            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
+            // withdrawal: formatCurrency(Math.round(withdrawal)),
+            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
+            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
+        });
+
+        // Update Corpus for Next Year
+        corpus = corpusWithInterest;
+    }
+ 
+
+    // Display Results in Table
+    displayPostRetirementResults2(results);
+}
+
+function displayPostRetirementResults2(results) {
+    const tbody = document.getElementById("postRetirementTable2").getElementsByTagName("tbody")[0];
+
+    // <!-- const tbody = document.querySelector("#postRetirementTable tbody"); -->
+    tbody.innerHTML = ""; // Clear existing rows
+
+    results.forEach(result => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${result.year}</td>
+            <td>${result.age}</td>
+            <td>${result.corpus}</td>
+            <td>${result.expectedExpensePA}</td>
+            <td>${result.corpusAfterWithdrawal}</td>
+            <td>${result.corpusWithInterest}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
 
 // Format Currency
@@ -1325,9 +1396,9 @@ function calculateTargetedCorpus() {
         // Add row to the table
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
-        row.insertCell(1).innerText = formatCurrency(targetedCorpus);
-        row.insertCell(2).innerText = formatCurrency(requiredMonthlySaving);
-        row.insertCell(3).innerText = formatCurrency(requiredAnnualSaving);
+        row.insertCell(1).innerText = formatCurrency(Math.round(targetedCorpus));
+        row.insertCell(2).innerText = formatCurrency(Math.round(requiredMonthlySaving));
+        row.insertCell(3).innerText = formatCurrency(Math.round(requiredAnnualSaving));
     });
 }
 function renderAssetAllocationCharts(assetAllocationData) {
@@ -1443,16 +1514,16 @@ function renderChart(labels, datasets) {
                     backgroundColor: "transparent",
                     pointBackgroundColor: "#ffffff",
                     pointBorderColor: "#000000",
-                    pointRadius: 1, // Slightly larger points for better visibility
+                    pointRadius: 3, // Slightly larger points for better visibility
                     borderWidth: 3, // Thicker lines for better contrast
-                    fill: false
+                    fill: true
             }))
         },
 
 
         options: {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
         legend: {
             display: false // Hide default legend (we add a custom one)
@@ -1539,9 +1610,9 @@ function calculateTargetedCorpus() {
         // Add row to the table
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
-        row.insertCell(1).innerText = formatCurrency(targetedCorpus);
-        row.insertCell(2).innerText = formatCurrency(requiredMonthlySaving);
-        row.insertCell(3).innerText = formatCurrency(requiredAnnualSaving);
+        row.insertCell(1).innerText = formatCurrency(Math.round(targetedCorpus));
+        row.insertCell(2).innerText = formatCurrency(Math.round(requiredMonthlySaving));
+        row.insertCell(3).innerText = formatCurrency(Math.round(requiredAnnualSaving));
     });
 }
         function getRandomColor() {
