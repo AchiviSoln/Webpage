@@ -420,9 +420,7 @@
     
     
 </style>
-<script>/* General Table Styling */
-    
-</script>
+
 </head>
 <body>
 <h1>Retirement Readiness Calculator</h1>
@@ -791,6 +789,13 @@
     </tbody>
 </table>
 
+<h2>Retirement Corpus and Corpus after expense</h2>
+<!-- Chart -->
+<div class="chart-container">
+    <canvas id="retirementExpenseChart"></canvas>
+</div>
+
+
 <script>
 // ====================== scripts starts here======================
 let myChart; // Chart instance
@@ -802,8 +807,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Automatically update on page load
     generateAssetClasses(); // Automatically generate asset classes on page load
     calculateRetirementCountdown();
-    calculatePostRetirementPlan();
+    // calculatePostRetirementPlan();
     calculateRetirement();
+    // calculatePostRetirementPlan2();
     
     
     
@@ -1059,16 +1065,6 @@ function calculateRetirement() {
 
 
     const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
-
-    // let corpus = 0;
-    // let currentExpensePA = currentExpenditure * 12; // Convert monthly expense to annual
-    // const tableBody = document.getElementById("withdrawalAnalysisTable").getElementsByTagName("tbody")[0];
-    // tableBody.innerHTML = "";
-
-
-
-
-  
     let totalPortfolioData = new Array(yearsToRetirement).fill(0); // For chart (up to retirement age)
     let assetClassBalances = [];
     let assetClassReturns = [];
@@ -1086,7 +1082,6 @@ function calculateRetirement() {
         totalInitialBalance += initialBalance;
     }
 calculateRetirementCountdown();
-
 updateProgressBar();
 calculateSensitivityAnalysis();
 calculateMarketReturnScenarios1();
@@ -1186,20 +1181,6 @@ for (let i = 0; i < summaryRows.length - 1; i++) { // Skip the last row (Total P
     });
 }
 
-
-// // Inside the loop where you calculate allocation percentages
-// assetAllocationData.push({
-//     assetClass: row.cells[0].innerText, // Asset Class Name
-//     currentAllocation: currentAllocationPercent,
-//     retirementAllocation: retirementAllocationPercent
-// });
-
-// Add Total row to the Asset Allocation Status table
-// let totalAllocationRow = allocationStatusTable.insertRow();
-// totalAllocationRow.insertCell(0).innerText = "Total";
-// totalAllocationRow.insertCell(1).innerText = "100%";
-// totalAllocationRow.insertCell(2).innerText = "100%";
-
 // Generate labels for x-axis (ages)
 for (let year = 0; year < yearsToRetirement; year++) {
     labels.push(currentAge + year);
@@ -1274,345 +1255,24 @@ for (let year = 0; year <= yearsToRetirement; year += 5) {
 
 // Calculate and populate the Targeted Corpus table
 calculateTargetedCorpus();
-renderAssetAllocationCharts(assetAllocationData);
+console.log("calling renderchart")
+console.log("Labels:",labels)
+console.log("Dataset:",datasets)
 renderChart(labels, datasets);
+renderAssetAllocationCharts(assetAllocationData);
 calculatePostRetirementPlan();
-calculatePostRetirementPlan2()
+calculatePostRetirementPlan2();
 
 }
-
-/////Update new table as given code
-
-function calculatePostRetirementPlan() {
-    // Input Values
-    const currentAge = parseInt(document.getElementById("currentAge").value);
-    const retirementAge = parseInt(document.getElementById("retirementAge").value);
-    const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
-    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
-    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
-    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
-    const yearsToRetirement = retirementAge - currentAge;
-    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
-    const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
-
-
-    // console.log("expectedInflation:",expectedInflation)
-    // console.log("OUtcome:",currentExpenditure * 12 * Math.pow(1 + expectedInflation))
-
-    // Initialize Variables
-    let corpus = totalCorpusAtRetirement;
-    let results = [];
-    
-    // Calculate Post-Retirement Plan
-    for (let age = retirementAge; age <= lifeExpectancy; age++) {
-        const yearsSinceRetirement = age - currentAge;
-        // console.log("retireAge:",age);
-        // console.log("Current AGe:",currentAge);
-        // console.log("Age Inflation:",age-currentAge);
-        const testedValue = age - currentAge;
-
-        // Calculate Expected Expense PA (Adjusted for Inflation)
-        // Calculate expected expense per month at retirement
-        // let yearsOfInflation = retirementAge - currentAge;
-        // let expectedExpensePerMonth = currentExpenditure * Math.pow(1 + expectedInflation, yearsOfInflation);
-        // let expectedAnnualExpense = expectedExpensePerMonth * 12;
-
-
-        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
-        // console.log("OUtcome:", currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue))
-
-        // const expectedExpensePA =expectedAnnualExpense;
-
-        // Calculate 4% Withdrawal
-        const withdrawal = corpus * 0.04;
-
-        // Calculate Corpus After Withdrawal
-        const corpusAfterWithdrawal = corpus - withdrawal;
-
-        // Calculate Corpus + Interest at Expected Rate
-        const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
-
-        // Store Results
-        results.push({
-            year: new Date().getFullYear() + yearsSinceRetirement,
-            age: age,
-            corpus: formatCurrency(Math.round(corpus)),
-            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
-            withdrawal: formatCurrency(Math.round(withdrawal)),
-            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
-            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
-        });
-
-        // Update Corpus for Next Year
-        corpus = corpusWithInterest;
-    }
-
-    // Display Results in Table
-    displayPostRetirementResults(results);
-}
-
-function displayPostRetirementResults(results) {
-    const tbody = document.getElementById("postRetirementTable").getElementsByTagName("tbody")[0];
-
-    // <!-- const tbody = document.querySelector("#postRetirementTable tbody"); -->
-    tbody.innerHTML = ""; // Clear existing rows
-
-    results.forEach(result => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${result.year}</td>
-            <td>${result.age}</td>
-            <td>${result.corpus}</td>
-            <td>${result.expectedExpensePA}</td>
-            <td>${result.withdrawal}</td>
-            <td>${result.corpusAfterWithdrawal}</td>
-            <td>${result.corpusWithInterest}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-function calculatePostRetirementPlan2() {
-    // Input Values
-    const currentAge = parseInt(document.getElementById("currentAge").value);
-    const retirementAge = parseInt(document.getElementById("retirementAge").value);
-    const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
-    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
-    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
-    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
-    const yearsToRetirement = retirementAge - currentAge;
-    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
-    const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
-
-
-    // console.log("expectedInflation:",expectedInflation)
-    // console.log("OUtcome:",currentExpenditure * 12 * Math.pow(1 + expectedInflation))
-
-    // Initialize Variables
-    let corpus = totalCorpusAtRetirement;
-    let results = [];
-    
-    // Calculate Post-Retirement Plan
-    for (let age = retirementAge; age <= lifeExpectancy; age++) {
-        const yearsSinceRetirement = age - currentAge;
-        // console.log("retireAge:",age);
-        // console.log("Current AGe:",currentAge);
-        // console.log("Age Inflation:",age-currentAge);
-        const testedValue = age - currentAge;
-
-        // Calculate Expected Expense PA (Adjusted for Inflation)
-        // Calculate expected expense per month at retirement
-        // let yearsOfInflation = retirementAge - currentAge;
-        // let expectedExpensePerMonth = currentExpenditure * Math.pow(1 + expectedInflation, yearsOfInflation);
-        // let expectedAnnualExpense = expectedExpensePerMonth * 12;
-
-
-        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
-        // console.log("OUtcome:", currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue))
-
-        // const expectedExpensePA =expectedAnnualExpense;
-
-        // Calculate 4% Withdrawal
-
-        // Calculate Corpus After Withdrawal
-        const corpusAfterWithdrawal = corpus - expectedExpensePA;
-
-        // Calculate Corpus + Interest at Expected Rate
-        const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
-
-        // Store Results
-        results.push({
-            year: new Date().getFullYear() + yearsSinceRetirement,
-            age: age,
-            corpus: formatCurrency(Math.round(corpus)),
-            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
-            // withdrawal: formatCurrency(Math.round(withdrawal)),
-            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
-            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
-        });
-
-        // Update Corpus for Next Year
-        corpus = corpusWithInterest;
-    }
- 
-
-    // Display Results in Table
-    displayPostRetirementResults2(results);
-}
-
-function displayPostRetirementResults2(results) {
-    const tbody = document.getElementById("postRetirementTable2").getElementsByTagName("tbody")[0];
-
-    // <!-- const tbody = document.querySelector("#postRetirementTable tbody"); -->
-    tbody.innerHTML = ""; // Clear existing rows
-
-    results.forEach(result => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${result.year}</td>
-            <td>${result.age}</td>
-            <td>${result.corpus}</td>
-            <td>${result.expectedExpensePA}</td>
-            <td>${result.corpusAfterWithdrawal}</td>
-            <td>${result.corpusWithInterest}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-
-// Format Currency
-function formatCurrency(value) {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' , minimumFractionDigits: 0, // Ensure no decimal places
-    maximumFractionDigits: 0 }).format(value);
-}
-
-
-
-
-function calculateTargetedCorpus() {
-    const currentAge = parseInt(document.getElementById("currentAge").value);
-    const retirementAge = parseInt(document.getElementById("retirementAge").value);
-    const yearsToRetirement = retirementAge - currentAge;
-    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
-    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
-    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
-
-    // Calculate expected annual expense at retirement
-    const expectedAnnualExpenseAtRetirement = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsToRetirement);
-
-    // Multiples of annual expenses to target
-    const multiples = [10, 15, 20, 25, 30, 35, 40, 45, 50];
-
-    const tableBody = document.getElementById("targetedCorpusTable").getElementsByTagName("tbody")[0];
-    tableBody.innerHTML = ""; // Clear existing rows
-
-    multiples.forEach(multiple => {
-        const targetedCorpus = expectedAnnualExpenseAtRetirement * multiple;
-
-        // Calculate required monthly and annual savings
-        const futureValue = targetedCorpus;
-        const rate = expectedReturn / 12;
-        const periods = yearsToRetirement * 12;
-        const requiredMonthlySaving = (futureValue * rate) / (Math.pow(1 + rate, periods) - 1);
-        const requiredAnnualSaving = requiredMonthlySaving * 12;
-
-        // Add row to the table
-        const row = tableBody.insertRow();
-        row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
-        row.insertCell(1).innerText = formatCurrency(Math.round(targetedCorpus));
-        row.insertCell(2).innerText = formatCurrency(Math.round(requiredMonthlySaving));
-        row.insertCell(3).innerText = formatCurrency(Math.round(requiredAnnualSaving));
-    });
-}
-function renderAssetAllocationCharts(assetAllocationData) {
-    // const table = document.getElementById("allocationStatusTable").getElementsByTagName("tbody")[0];
-
-    // if (!table || table.rows.length === 0) {
-    //     console.error("Error: allocationStatusTable is empty or missing.");
-    //     return;
-    // }
-    if (!assetAllocationData || assetAllocationData.length === 0) {
-        console.error("Error: No asset allocation data provided.");
-        return;
-    }
-    let labels = [];
-    let currentData = [];
-    let retirementData = [];
-    let colors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#8e44ad'];
-
-    // for (let i = 0; i < table.rows.length - 1; i++) { // Ignore last row
-    //     let cells = table.rows[i].cells;
-    //     if (cells.length < 3) continue; // Ensure there are at least 3 columns
-
-    //     labels.push(cells[0].innerText);
-    //     currentData.push(parseFloat(cells[1].innerText.replace("%", "")) || 0);
-    //     retirementData.push(parseFloat(cells[2].innerText.replace("%", "")) || 0);
-    // }
-    assetAllocationData.forEach(data => {
-    labels.push(data.assetClass);
-    currentData.push(parseFloat(data.currentAllocation));
-    retirementData.push(parseFloat(data.retirementAllocation));
-    });
-    
-    // console.log("Labels:", labels);
-    // console.log("Current Data:", currentData);
-    // console.log("Retirement Data:", retirementData);
-
-    function createChart(chartId, labels, data, legendId) {
-    const canvas = document.getElementById(chartId);
-    const ctx = canvas.getContext('2d');
-
-    if (window[chartId] instanceof Chart) {
-        window[chartId].destroy();
-    }
-
-    const isMobile = window.innerWidth < 768;
-    const labelOffset = isMobile ? 5 : 10;
-    const labelFontSize = isMobile ? 10 : 14;
-
-    window[chartId] = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: colors,
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                datalabels: {
-                    color: 'black',
-                    font: { weight: 'bold', size: labelFontSize },
-                    formatter: (value) => `${value}%`,
-                    anchor: 'center',
-                    align: 'center',
-                    offset: labelOffset,
-                    clamp: true,
-                    rotation: 45
-                }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-
-    document.getElementById(legendId).innerHTML = labels.map((label, index) => `
-        <span style="display: inline-block; margin: 5px; padding: 5px; border-radius: 5px; background-color: ${colors[index]}; color: white;">
-            ${label}
-        </span>
-    `).join(" ");
-}
-
-// **Resize Event Listener to Recreate Chart**
-window.addEventListener('resize', () => {
-    createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
-    createChart('retirementAssetAllocationChart', labels, retirementData, 'retirementAssetAllocationLegend');
-});
-
-
-    // **Call createChart separately for both charts**
-    createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
-    createChart('retirementAssetAllocationChart', labels, retirementData, 'retirementAssetAllocationLegend');
-}
-
-// **Delay execution to ensure the table is ready**
-document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(renderAssetAllocationCharts, 2000);
-});
-
-
 
 
 function renderChart(labels, datasets) {
-        const ctx = document.getElementById('investmentChart').getContext('2d');
-        if (window.myChart) {
-            window.myChart.destroy();
-        }
+    const ctx = document.getElementById('investmentChart').getContext('2d');
+    if (window.myChart instanceof Chart) {
+    console.log("Destroying previous myRetirementChart...");
+    window.myChart.destroy();
+}
+
         window.myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -1709,7 +1369,402 @@ function renderChart(labels, datasets) {
 ]
 });
 
+}
+
+
+/////Update new table as given code
+
+function calculatePostRetirementPlan() {
+    // Input Values
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAge = parseInt(document.getElementById("retirementAge").value);
+    const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
+    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+    const yearsToRetirement = retirementAge - currentAge;
+    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
+    const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
+
+
+    // console.log("expectedInflation:",expectedInflation)
+    // console.log("OUtcome:",currentExpenditure * 12 * Math.pow(1 + expectedInflation))
+
+    // Initialize Variables
+    let corpus = totalCorpusAtRetirement;
+    let results = [];
+    
+    // Calculate Post-Retirement Plan
+    for (let age = retirementAge; age <= lifeExpectancy; age++) {
+        const yearsSinceRetirement = age - currentAge;
+
+        const testedValue = age - currentAge;
+
+        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
+    
+
+        // Calculate 4% Withdrawal
+        const withdrawal = corpus * 0.04;
+
+        // Calculate Corpus After Withdrawal
+        const corpusAfterWithdrawal = corpus - withdrawal;
+
+        // Calculate Corpus + Interest at Expected Rate
+        const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
+
+        // Store Results
+        results.push({
+            year: new Date().getFullYear() + yearsSinceRetirement,
+            age: age,
+            corpus: formatCurrency(Math.round(corpus)),
+            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
+            withdrawal: formatCurrency(Math.round(withdrawal)),
+            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
+            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
+        });
+
+        // Update Corpus for Next Year
+        corpus = corpusWithInterest;
+    }
+
+    // Display Results in Table
+    displayPostRetirementResults(results);
+}
+
+function displayPostRetirementResults(results) {
+    const tbody = document.getElementById("postRetirementTable").getElementsByTagName("tbody")[0];
+
+    // <!-- const tbody = document.querySelector("#postRetirementTable tbody"); -->
+    tbody.innerHTML = ""; // Clear existing rows
+
+    results.forEach(result => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${result.year}</td>
+            <td>${result.age}</td>
+            <td>${result.corpus}</td>
+            <td>${result.expectedExpensePA}</td>
+            <td>${result.withdrawal}</td>
+            <td>${result.corpusAfterWithdrawal}</td>
+            <td>${result.corpusWithInterest}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+
+function calculatePostRetirementPlan2() {
+    // Input Values
+    const currentAge = parseInt(document.getElementById("currentAge").value);
+    const retirementAge = parseInt(document.getElementById("retirementAge").value);
+    const lifeExpectancy = parseInt(document.getElementById("lifeExpectancy").value);
+    const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+    const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+    const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+    const yearsToRetirement = retirementAge - currentAge;
+    const corpusElement = document.getElementById("corpusAtRetirement").innerText;
+    const totalCorpusAtRetirement = parseFloat(corpusElement.replace(/[^0-9.-]+/g, "")) || 0;
+
+    // Initialize Variables
+    let corpus = totalCorpusAtRetirement;
+    let results = [];
+    
+    // Calculate Post-Retirement Plan
+    for (let age = retirementAge; age <= lifeExpectancy; age++) {
+        const yearsSinceRetirement = age - currentAge;
+     
+        const testedValue = age - currentAge;
+
+        const expectedExpensePA = currentExpenditure * 12 * Math.pow((1 + expectedInflation),testedValue);
+    
+        // Calculate Corpus After Withdrawal
+        const corpusAfterWithdrawal = corpus - expectedExpensePA;
+
+        // Calculate Corpus + Interest at Expected Rate
+        const corpusWithInterest = corpusAfterWithdrawal * (1 + expectedReturn);
+
+        // Store Results
+        results.push({
+            year: new Date().getFullYear() + yearsSinceRetirement,
+            age: age,
+            corpus: formatCurrency(Math.round(corpus)),
+            expectedExpensePA: formatCurrency(Math.round(expectedExpensePA)),
+            // withdrawal: formatCurrency(Math.round(withdrawal)),
+            corpusAfterWithdrawal: formatCurrency(Math.round(corpusAfterWithdrawal)),
+            corpusWithInterest: formatCurrency(Math.round(corpusWithInterest)),
+        });
+
+        // Update Corpus for Next Year
+        corpus = corpusWithInterest;
+    }
+ 
+    // Display Results in Table
+    displayPostRetirementResults2(results);
+    
+
+}
+
+function cleanCurrency(value) {
+    if (!value) return 0; // Handle empty or undefined values
+
+    // Remove currency symbols, commas, and extra spaces
+    let cleanedValue = value.replace(/[^0-9.-]/g, "").trim();
+
+    // Convert to a number (handles negatives as well)
+    return parseFloat(cleanedValue) || 0;
+}
+
+
+
+
+function displayPostRetirementResults2(results) {
+    const tbody = document.getElementById("postRetirementTable2").getElementsByTagName("tbody")[0];
+    tbody.innerHTML = ""; // Clear existing rows
+    let labels2 = [];
+    let corpusData = [];
+    let corpusAfterExpenseData = [];
+    results.forEach(result => {
+        labels2.push(Number( result.age));
+        corpusData.push(cleanCurrency(result.corpus));
+        corpusAfterExpenseData.push(cleanCurrency(result.expectedExpensePA));
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${result.year}</td>
+            <td>${result.age}</td>
+            <td>${result.corpus}</td>
+            <td>${result.expectedExpensePA}</td>
+            <td>${result.corpusAfterWithdrawal}</td>
+            <td>${result.corpusWithInterest}</td>
+        `;
+        tbody.appendChild(row);
+
+    });
+
+    // Create datasets for the chart
+    let datasets2 = [
+            {
+                label: "Corpus",
+                data: corpusData,
+                borderColor: "#1F77B4",
+                backgroundColor: "rgba(31, 119, 180, 0.2)"
+            },
+            {
+                label: "ExpectedExpensePA",
+                data: corpusAfterExpenseData,
+                borderColor: "#FF7F0E",
+                backgroundColor: "rgba(255, 127, 14, 0.2)"
+            }
+        ];
+    renderChartRetirement(labels2, datasets2);
+
+
+}
+
+function renderChartRetirement(labels, datasets) {
+    const ctx = document.getElementById("retirementExpenseChart").getContext('2d');
+
+    if (window.myChart1 instanceof Chart) {
+    console.log("Destroying previous myRetirementChart...");
+    window.myChart1.destroy();
+    }
+
+    window.myChart1 = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: datasets.map((dataset, index) => ({
+            ...dataset,
+            borderColor: ["#1F77B4", "#FF7F0E"][index % 2], // Dynamic colors
+            backgroundColor: "transparent",
+            pointBackgroundColor: "#ffffff",
+            pointBorderColor: "#000000",
+            pointRadius: 2, // Slightly bigger points
+            pointHoverRadius: 7, // Enlarges points on hover
+            borderWidth: 3,
+            fill: true,
+            hitRadius: 10 // Expands hit area for better hover experience
+        }))
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // Allow flexible resizing
+        plugins: {
+            legend: { display: true }
+        },
+        interaction: {
+            mode: "nearest", // Show tooltip for nearest point
+            intersect: false // Allow hovering near the point
+        },
+        layout: {
+            padding: { top: 20, left: 20, right: 20, bottom: 20 }
+        },
+        scales: {
+            x: {
+                type: "linear",
+                position: "bottom",
+                title: { display: true, text: "Age" },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 7
+                }
+            },
+            y: {
+                title: { display: true, text: "Portfolio Value (INR)" },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 7
+                }
+            }
+        },
+        animation: {
+            duration: 200, // Faster tooltip animation
+            easing: "easeInOutQuad"
+        },
+        elements: {
+            point: {
+                radius: 4, // Default point size
+                hoverRadius: 7 // Enlarges when hovered
+            }
         }
+    }
+    
+});
+
+
+}
+
+
+// Format Currency
+function formatCurrency(value) {
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' , minimumFractionDigits: 0, // Ensure no decimal places
+    maximumFractionDigits: 0 }).format(value);
+}
+
+// function calculateTargetedCorpus() {
+//     const currentAge = parseInt(document.getElementById("currentAge").value);
+//     const retirementAge = parseInt(document.getElementById("retirementAge").value);
+//     const yearsToRetirement = retirementAge - currentAge;
+//     const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+//     const currentExpenditure = parseFloat(document.getElementById("currentExpenditure").value);
+//     const expectedInflation = parseFloat(document.getElementById("expectedInflation").value) / 100;
+
+//     // Calculate expected annual expense at retirement
+//     const expectedAnnualExpenseAtRetirement = currentExpenditure * 12 * Math.pow(1 + expectedInflation, yearsToRetirement);
+
+//     // Multiples of annual expenses to target
+//     const multiples = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+
+//     const tableBody = document.getElementById("targetedCorpusTable").getElementsByTagName("tbody")[0];
+//     tableBody.innerHTML = ""; // Clear existing rows
+
+//     multiples.forEach(multiple => {
+//         const targetedCorpus = expectedAnnualExpenseAtRetirement * multiple;
+
+//         // Calculate required monthly and annual savings
+//         const futureValue = targetedCorpus;
+//         const rate = expectedReturn / 12;
+//         const periods = yearsToRetirement * 12;
+//         const requiredMonthlySaving = (futureValue * rate) / (Math.pow(1 + rate, periods) - 1);
+//         const requiredAnnualSaving = requiredMonthlySaving * 12;
+
+//         // Add row to the table
+//         const row = tableBody.insertRow();
+//         row.insertCell(0).innerText = `To meet ${multiple}x annual expenses`;
+//         row.insertCell(1).innerText = formatCurrency(Math.round(targetedCorpus));
+//         row.insertCell(2).innerText = formatCurrency(Math.round(requiredMonthlySaving));
+//         row.insertCell(3).innerText = formatCurrency(Math.round(requiredAnnualSaving));
+//     });
+// }
+function renderAssetAllocationCharts(assetAllocationData) {
+
+    if (!assetAllocationData || assetAllocationData.length === 0) {
+        console.error("Error: No asset allocation data provided.");
+        return;
+    }
+    let labels = [];
+    let currentData = [];
+    let retirementData = [];
+    let colors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#8e44ad'];
+
+    assetAllocationData.forEach(data => {
+    labels.push(data.assetClass);
+    currentData.push(parseFloat(data.currentAllocation));
+    retirementData.push(parseFloat(data.retirementAllocation));
+    });
+
+
+    function createChart(chartId, labels, data, legendId) {
+    const canvas = document.getElementById(chartId);
+    const ctx = canvas.getContext('2d');
+
+    if (window[chartId] instanceof Chart) {
+        window[chartId].destroy();
+    }
+
+    const isMobile = window.innerWidth < 768;
+    const labelOffset = isMobile ? 5 : 10;
+    const labelFontSize = isMobile ? 10 : 14;
+
+    window[chartId] = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    color: 'black',
+                    font: { weight: 'bold', size: labelFontSize },
+                    formatter: (value) => `${value}%`,
+                    anchor: 'center',
+                    align: 'center',
+                    offset: labelOffset,
+                    clamp: true,
+                    rotation: 45
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    document.getElementById(legendId).innerHTML = labels.map((label, index) => `
+        <span style="display: inline-block; margin: 5px; padding: 5px; border-radius: 5px; background-color: ${colors[index]}; color: white;">
+            ${label}
+        </span>
+    `).join(" ");
+}
+
+// **Resize Event Listener to Recreate Chart**
+window.addEventListener('resize', () => {
+    createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
+    createChart('retirementAssetAllocationChart', labels, retirementData, 'retirementAssetAllocationLegend');
+});
+
+
+    // **Call createChart separately for both charts**
+    createChart('currentAssetAllocationChart', labels, currentData, 'currentAssetAllocationLegend');
+    createChart('retirementAssetAllocationChart', labels, retirementData, 'retirementAssetAllocationLegend');
+}
+
+// **Delay execution to ensure the table is ready**
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(renderAssetAllocationCharts, 100);
+});
+
+
+
+
+
+
 function calculateTargetedCorpus() {
     const currentAge = parseInt(document.getElementById("currentAge").value);
     const retirementAge = parseInt(document.getElementById("retirementAge").value);
@@ -1758,10 +1813,6 @@ function calculateTargetedCorpus() {
         function getRandomColor() {
             return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
-
-        // function formatCurrency(value) {
-        //     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
-        // }
     </script>
 
 
